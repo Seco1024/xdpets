@@ -1,9 +1,9 @@
 from django.db import models
-from user.models import Users
+from user.models import UserProfile
 # Create your models here.
 
 class Pet(models.Model):
-    user = models.ForeignKey(Users, on_delete=models.CASCADE, related_name='pets')
+    ownerId = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     name = models.CharField(max_length=20)
     breed = models.CharField(max_length=20)
     category = models.CharField(max_length=20)
