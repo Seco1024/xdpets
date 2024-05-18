@@ -10,6 +10,7 @@ import uuid
 import datetime as dt
 
 from .models import Profile
+from .models import Profile
 # from .models import Pet 
 
 # Create your views here.
@@ -25,27 +26,24 @@ def sign_up(request):
             # user = User.objects.create_user(username = username, email = email, password = password)
             # print(user)
             # 创建用户配置文件
-            print("ddada")
-            profile = Profile.objects.create(email = email, username = username, password = password, phone = phone) 
-            print("ddada")
-            profile.save()
 
-            print(profile)
             # 用戶名和電子郵件不能重複
-            if profile.objects.filter(email=email).exists():
+            if Profile.objects.filter(email=email).exists():
                 return JsonResponse({'status': 'error', 'message': '電子郵件已存在'})
-            if profile.objects.filter(username=username).exists():
+            if Profile.objects.filter(username=username).exists():
                 return JsonResponse({'status': 'error', 'message': '用戶名已存在'})
-
+            
+            profile = Profile.objects.create(email = email, username = username, password = password, phone = phone) 
+            profile.save()
             print(profile.uid)
 
             validate_password(password) # 驗證密碼是否符合要求
             # user.set_password(password) # 加密密碼
             profile_info = {
                 'uid': profile.uid,
-                'email': profile.user.email,
+                'email': profile.email,
                 'phone': profile.phone,
-                'username': profile.user.username,
+                'username': profile.username,
                 'date': profile.date,
             }
             return JsonResponse({'status': 'success', 'profile': profile_info})
