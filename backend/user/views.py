@@ -9,7 +9,7 @@ from django.core.exceptions import ValidationError
 import uuid
 import datetime as dt
 
-from .models import UserProfile
+from .models import Profile
 # from .models import Pet 
 
 # Create your views here.
@@ -18,15 +18,15 @@ def sign_up(request):
     if request.method == 'POST':
         try:
             email = request.POST["email"]
-            phone = request.POST["phone"]
             username = request.POST["username"]
             password = request.POST["password"]
+            phone = request.POST["phone"]
             
-            print("ddada")
-            user = User.objects.create_user(username = username, email = email, password = password)
-            print("ddada")
+            # user = User.objects.create_user(username = username, email = email, password = password)
+            # print(user)
             # 创建用户配置文件
-            profile = UserProfile.objects.create(user = user, phone = phone) 
+            print("ddada")
+            profile = Profile.objects.create(email = email, username = username, password = password, phone = phone) 
             print("ddada")
             profile.save()
 
@@ -42,7 +42,7 @@ def sign_up(request):
             validate_password(password) # 驗證密碼是否符合要求
             # user.set_password(password) # 加密密碼
             profile_info = {
-                'userId': profile.uid,
+                'uid': profile.uid,
                 'email': profile.user.email,
                 'phone': profile.phone,
                 'username': profile.user.username,
@@ -75,26 +75,26 @@ def login_view(request):
         return render(request, 'login.html', locals())
     
 
-@require_http_methods(["GET"])
-def get_information(request):
-    userId = request.GET['userId']
-    if not userId:
-        return JsonResponse({'status': 'error', 'message': '缺少用戶ID參數'})
+# @require_http_methods(["GET"])
+# def get_information(request):
+#     userId = request.GET['uid']
+#     if not userId:
+#         return JsonResponse({'status': 'error', 'message': '缺少用戶ID參數'})
 
-    try:
-        user = UserProfile.objects.get(uid=userId)
-        user_info = {
-            'username': user.username,
-            'email': user.email,
-            'phone': user.phone,
-        }
-        return JsonResponse({'status': 'success', 'data': user_info})
+#     try:
+#         user = UserProfile.objects.get(uid=userId)
+#         user_info = {
+#             'username': user.username,
+#             'email': user.email,
+#             'phone': user.phone,
+#         }
+#         return JsonResponse({'status': 'success', 'data': user_info})
     
-    except UserProfile.DoesNotExist:
-        return JsonResponse({'status': 'error', 'message': '用戶不存在'})
+#     except UserProfile.DoesNotExist:
+#         return JsonResponse({'status': 'error', 'message': '用戶不存在'})
 
-    except Exception as e:
-        return JsonResponse({'status': 'error', 'message': str(e)})
+#     except Exception as e:
+#         return JsonResponse({'status': 'error', 'message': str(e)})
 
 
 # @csrf_exempt
