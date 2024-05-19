@@ -24,14 +24,14 @@ def addAdministrator(request):
         admin.set_password(data["password"])
         admin.save()
         return JsonResponse({"message": "Administrator created successfully.", 
-                             "admin_id": str(admin.admin_uid)}, status=201)
+                             "adminId": str(admin.admin_uid)}, status=201)
 
     except Profile.DoesNotExist:
-        return JsonResponse({"message": "Profile not found."}, status=404)
+        return JsonResponse({"message": "Profile not found.", "adminId": None}, status=404)
     except json.JSONDecodeError:
-        return JsonResponse({"message": "Invalid JSON."}, status=400)
+        return JsonResponse({"message": "Invalid JSON.", "adminId": None}, status=400)
     except Exception as e:
-        return JsonResponse({"message": str(e)}, status=500)
+        return JsonResponse({"message": str(e), "adminId": None}, status=500)
 
 @csrf_exempt
 @require_http_methods(["POST"])
@@ -47,7 +47,7 @@ def loginAdministrator(request):
             return JsonResponse({"message": "Administrator not found."}, status=404)
         
         if admin.check_password(password):
-            return JsonResponse({"message": "Login successful.", "admin_uid": str(admin.admin_uid)}, status=200)
+            return JsonResponse({"message": "Login successful."}, status=200)
         else:
             return JsonResponse({"message": "Invalid password."}, status=400)
     
@@ -61,7 +61,7 @@ def loginAdministrator(request):
 def deleteAdministrator(request):
     try:
         data = json.loads(request.body)
-        admin_uid = data["admin_id"]
+        admin_uid = data["adminId"]
         admin = Administrator.objects.get(admin_uid=admin_uid)
         admin.delete()
         
@@ -69,6 +69,39 @@ def deleteAdministrator(request):
     
     except Administrator.DoesNotExist:
         return JsonResponse({"message": "Administrator not found."}, status=404)
+    except json.JSONDecodeError:
+        return JsonResponse({"message": "Invalid JSON."}, status=400)
+    except Exception as e:
+        return JsonResponse({"message": str(e)}, status=500)
+    
+@csrf_exempt
+@require_http_methods(["POST"])
+def deletePet(request):
+    try:
+        data = json.loads(request.body)
+        pet = Pet.objects.get(pet_id=data["petId"])
+        pet.delete()
+        return JsonResponse({"message": "Pet deleted successfully."}, status=200)
+    
+    except Pet.DoesNotExist:
+        return JsonResponse({"message": "Pet not found."}, status=404)
+    except json.JSONDecodeError:
+        return JsonResponse({"message": "Invalid JSON."}, status=400)
+    except Exception as e:
+        return JsonResponse({"message": str(e)}, status=500)
+    
+@csrf_exempt
+@require_http_methods(["POST"])
+def judgePet(request):
+    try:
+        data = json.loads(request.body)
+        pet = Pet.objects.get(pet_id=data['petId'])
+        pet.legal = data['isLegal']
+        pet.save()
+        return JsonResponse({"message": "Preference updated successfully."}, status=200)
+    
+    except Pet.DoesNotExist:
+        return JsonResponse({"message": "Pet not found."}, status=404)
     except json.JSONDecodeError:
         return JsonResponse({"message": "Invalid JSON."}, status=400)
     except Exception as e:
