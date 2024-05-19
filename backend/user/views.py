@@ -1,17 +1,13 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, HttpResponseNotAllowed, JsonResponse
-from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
-import uuid
-import datetime as dt
 
 from .models import Profile
-from .models import Profile
-# from .models import Pet 
+from pet.models import Pet 
 
 # Create your views here.
 @csrf_exempt
@@ -72,50 +68,29 @@ def login_view(request):
         # Render the login form
         return render(request, 'login.html', locals())
     
+@csrf_exempt
+def add_new_pet(request):
+    if request.method == 'POST':
+        user_id = request.POST['uid']
+        pet_name = request.POST['petName']
+        pet_breed = request.POST['petBreed']
+        pet_category = request.POST['petCategory']
+        pet_gender = request.POST['petGender']
+        pet_age = request.POST['petAge']
 
-# @require_http_methods(["GET"])
-# def get_information(request):
-#     userId = request.GET['uid']
-#     if not userId:
-#         return JsonResponse({'status': 'error', 'message': '缺少用戶ID參數'})
+        try:
+            # 假設Pet模型中有一個外鍵指向User模型
+            pet = Pet.objects.create(ownerId=user_id, name=pet_name, breed=pet_breed, 
+                                     category=pet_category, gender = pet_gender, age = pet_age, )
+            return JsonResponse({'status': 200, 'success': True, 'userId': pet.ownerId, 'petName': pet.name, 
+                                 'breed': pet.breed, 'category': pet.category, 'gender': pet.gender, 'age': pet.age})
+            # return JsonResponse({'status': 200, 'success': True, 'pet_info': pet.objects.all()})
+        except Exception as e:
+            return JsonResponse({'status': 500, 'success': False, 'message': str(e)})
 
-#     try:
-#         user = UserProfile.objects.get(uid=userId)
-#         user_info = {
-#             'username': user.username,
-#             'email': user.email,
-#             'phone': user.phone,
-#         }
-#         return JsonResponse({'status': 'success', 'data': user_info})
-    
-#     except UserProfile.DoesNotExist:
-#         return JsonResponse({'status': 'error', 'message': '用戶不存在'})
-
-#     except Exception as e:
-#         return JsonResponse({'status': 'error', 'message': str(e)})
-
-
-# @csrf_exempt
-# def add_new_pet(request):
-#     if request.method == 'POST':
-#         user_id = request.POST['userId']
-#         pet_name = request.POST['petName']
-#         pet_breed = request.POST['petBreed']
-#         pet_category = request.POST['petCategory']
-#         pet_gender = request.POST['petGender']
-
-#         try:
-#             # 假設Pet模型中有一個外鍵指向User模型
-#             pet = Pet.objects.create(user_id=user_id, name=pet_name, breed=pet_breed, 
-#                                      category=pet_category, gender = pet_gender)
-#             return JsonResponse({'status': 200, 'success': True, 'userId': user_id, 'petName': pet_name, 
-#                                  'breed': pet_breed, 'category': pet_category, 'gender': pet_gender})
-#             # return JsonResponse({'status': 200, 'success': True, 'pet_info': pet.objects.all()})
-#             return JsonResponse({'status': 200, 'success': True, 'message': '寵物添加成功'})
-#         except Exception as e:
-#             return JsonResponse({'status': 500, 'success': False, 'message': str(e)})
-
-#     return JsonResponse({'status': 400, 'success': False, 'message': '只接受POST請求'})
+    else:
+        # return HttpResponseNotAllowed(['POST'])
+        return JsonResponse({'status': 400, 'success': False, 'message': '只接受POST請求'})
 
 # @csrf_exempt
 # def delete_pet(request):
@@ -135,6 +110,26 @@ def login_view(request):
 
 #     return JsonResponse({'status': 400, 'success': False, 'message': '只接受POST請求'})
 
+# @require_http_methods(["GET"])
+# def get_information(request):
+#     userId = request.GET['uid']
+#     if not userId:
+#         return JsonResponse({'status': 'error', 'message': '缺少用戶ID參數'})
+
+#     try:
+#         user = Profile.objects.get(uid=userId)
+#         user_info = {
+#             'username': user.username,
+#             'email': user.email,
+#             'phone': user.phone,
+#         }
+#         return JsonResponse({'status': 'success', 'data': user_info})
+    
+#     except Profile.DoesNotExist:
+#         return JsonResponse({'status': 'error', 'message': '用戶不存在'})
+
+#     except Exception as e:
+#         return JsonResponse({'status': 'error', 'message': str(e)})
 
 
 
