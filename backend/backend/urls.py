@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from user.views import *
 from match.views import *
+from administrator.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,4 +29,7 @@ urlpatterns = [
     path('match/getPreference', getPreference),
     path('match/deletePreference', deletePreference),
     path('match/updatePreference', updatePreference),
+    path('administrator/addAdministrator', addAdministrator),
+    path('administrator/loginAdministrator', loginAdministrator),
+    path('administrator/deleteAdministrator', deleteAdministrator),
 ]
