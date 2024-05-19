@@ -27,17 +27,15 @@ def addPreference(request):
         preference, created = Preference.objects.get_or_create(**preference_data)
 
         if not created:
-            return JsonResponse({"message": "Preference already exists."}, status=400)
+            return JsonResponse({"message": "Preference already exists.", "preferenceId": None}, status=400)
         else:
-            # new_preference = Preference.objects.create(**preference_data)
-            # new_preference.save()
-            return JsonResponse({"message": f"Preference created successfully: {str(preference.preferenceId)}"}, status=201)
+            return JsonResponse({"message": f"Preference created successfully.", "preferenceId": preference.preferenceId}, status=201)
     
     except json.JSONDecodeError:
-        return JsonResponse({"message": "Invalid JSON."}, status=400)
+        return JsonResponse({"message": "Invalid JSON.", "preferenceId": None}, status=400)
     
     except Exception as e:
-        return JsonResponse({"message": str(e)}, status=500)
+        return JsonResponse({"message": str(e), "preferenceId": None}, status=500)
     
 
 @csrf_exempt
