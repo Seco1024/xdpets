@@ -15,9 +15,9 @@ def addAdministrator(request):
         data = json.loads(request.body)
         
         if Administrator.objects.filter(email=data["email"]).exists():
-            return JsonResponse({'message': '此電子郵件已被其他管理者使用'}, status=400)
+            return JsonResponse({'message': '此電子郵件已被其他管理者使用', "adminId": None}, status=400)
         if Administrator.objects.filter(admin_name=data["adminName"]).exists():
-            return JsonResponse({'message': '此名稱已被其他管理者使用'}, status=400)
+            return JsonResponse({'message': '此名稱已被其他管理者使用', "adminId": None}, status=400)
         
         user_profile = Profile.objects.get(uid=data["userId"])
         admin = Administrator(admin_name=data["adminName"], email=data["email"], user_id=user_profile)
