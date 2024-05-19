@@ -26,4 +26,13 @@ urlpatterns = [
     path('user/signup/', sign_up),
     path('user/addNewPet/', add_new_pet),
     # path('user/getInformation/',get_information),
+    path('match/addPreference', addPreference),
+    path('match/getPreference', getPreference),
+    path('match/deletePreference', deletePreference),
+    path('match/updatePreference', updatePreference),
+    path('administrator/addAdministrator', addAdministrator),
+    path('administrator/loginAdministrator', loginAdministrator),
+    path('administrator/deleteAdministrator', deleteAdministrator),
+    path('administrator/deletePet', deletePet),
+    path('administrator/judgePet', judgePet),
 ]
