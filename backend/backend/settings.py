@@ -12,14 +12,11 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
-<<<<<<< HEAD
 import dotenv
 
 # 讀取 .env 文件
 dotenv.load_dotenv()
 
-=======
->>>>>>> 2fedce07352582126d15443c1161a892326ed6fe
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -45,14 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-<<<<<<< HEAD
-    'user',
-    'pet',
-    'match'
-=======
     'user.apps.UserConfig',
     'pet.apps.PetConfig',
->>>>>>> 2fedce07352582126d15443c1161a892326ed6fe
+    'match.apps.MatchConfig'
 ]
 
 MIDDLEWARE = [
