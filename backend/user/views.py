@@ -51,7 +51,8 @@ def sign_up(request):
             return JsonResponse({'status': 'ExceptionError', 'message': str(e)})
     else:
         return HttpResponseNotAllowed(['POST'])
-        
+
+@csrf_exempt
 def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
