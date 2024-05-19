@@ -1,1 +1,3 @@
 backend/.env
+user/_pycache_/
+pet/_pycache_/
