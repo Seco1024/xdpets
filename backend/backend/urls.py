@@ -19,6 +19,7 @@ from django.urls import path
 from user.views import *
 from match.views import *
 from administrator.views import *
+from pet.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -35,4 +36,6 @@ urlpatterns = [
     path('administrator/deleteAdministrator', deleteAdministrator),
     path('administrator/deletePet', deletePet),
     path('administrator/judgePet', judgePet),
+    path('pet/getAllPets/', getAllPets),
+    path('pet/getPet/', getPet),
 ]
