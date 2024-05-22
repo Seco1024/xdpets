@@ -33,7 +33,10 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
-# Application definition
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'pet')
+
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -57,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 
 ROOT_URLCONF = 'backend.urls'
 
