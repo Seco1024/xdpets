@@ -1,15 +1,58 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.hashers import check_password, make_password
 from django.http import HttpResponse, HttpResponseNotAllowed, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import User
 
 from .models import Profile
 from pet.models import Pet 
 
 # Create your views here.
+# @csrf_exempt
+# def sign_up(request):
+#     if request.method == 'POST':
+#         try:
+#             email = request.POST["email"]
+#             username = request.POST["username"]
+#             password = request.POST["password"]
+#             phone = request.POST["phone"]
+
+#             validate_password(password) # 驗證密碼是否符合要求
+            
+#             # 用戶名和電子郵件不能重複
+#             if Profile.objects.filter(email=email).exists():
+#                 return JsonResponse({'status': 'error', 'message': '電子郵件已存在'})
+#             if Profile.objects.filter(username=username).exists():
+#                 return JsonResponse({'status': 'error', 'message': '用戶名已存在'})
+            
+#             user = User.objects.create_user(username=username, email=email, password=password)
+            
+#             profile = Profile.objects.create(user=user, phone=phone) 
+#             profile.save()
+
+
+#             profile_info = {
+#                 'uid': profile.uid,
+#                 'email': profile.email,
+#                 'phone': profile.phone,
+#                 'username': profile.username,
+#                 'date': profile.date,
+#             }
+
+#             return JsonResponse({'status': 'success', 'profile': profile_info})
+
+#         except ValidationError as e:
+#             return JsonResponse({'status': 'ValidationError', 'message': e.messages})
+        
+#         except Exception as e:
+#             return JsonResponse({'status': 'ExceptionError', 'message': str(e)})
+#     else:
+#         return HttpResponseNotAllowed(['POST'])
+    
 @csrf_exempt
 def sign_up(request):
     if request.method == 'POST':
@@ -18,10 +61,10 @@ def sign_up(request):
             username = request.POST["username"]
             password = request.POST["password"]
             phone = request.POST["phone"]
+
+            validate_password(password) # 驗證密碼是否符合要求
             
-            # user = User.objects.create_user(username = username, email = email, password = password)
-            # print(user)
-            # 创建用户配置文件
+            encrypted_password = make_password(password) # 加密密碼
 
             # 用戶名和電子郵件不能重複
             if Profile.objects.filter(email=email).exists():
@@ -29,12 +72,10 @@ def sign_up(request):
             if Profile.objects.filter(username=username).exists():
                 return JsonResponse({'status': 'error', 'message': '用戶名已存在'})
             
-            profile = Profile.objects.create(email = email, username = username, password = password, phone = phone) 
+            profile = Profile.objects.create(email = email, username = username, password = encrypted_password, phone = phone) 
             profile.save()
-            print(profile.uid)
 
-            validate_password(password) # 驗證密碼是否符合要求
-            # user.set_password(password) # 加密密碼
+
             profile_info = {
                 'uid': profile.uid,
                 'email': profile.email,
@@ -57,17 +98,21 @@ def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None and user.is_active:
-            login(request, user)
-            # return HttpResponse('登錄成功')
-            return JsonResponse({'status': 'success', 'message': '登錄成功'})
+        
+        users = Profile.objects.filter(username=username)
+        if users.exists():
+            user = users.first() 
+            if user.authenticate(password):
+                request.session['uuid'] = str(user.uid)
+                return JsonResponse({'status': 'success', 'message': '登入成功'})
+            else:
+                return JsonResponse({'status': 'error', 'message': '密碼錯誤'})
         else:
-            # return HttpResponse('登錄失敗，請檢查您的用戶名和密碼')
-            return JsonResponse({'status': 'error', 'message': '登錄失敗，請檢查您的用戶名和密碼'})
+            return JsonResponse({'status': 'error', 'message': '用戶不存在'})
     else:
         # Render the login form
-        return render(request, 'login.html', locals())
+        # return render(request, 'login.html', locals())
+        return HttpResponseNotAllowed(['POST'])
     
 @csrf_exempt
 def add_new_pet(request):
