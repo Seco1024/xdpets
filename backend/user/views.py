@@ -12,47 +12,6 @@ from .models import Profile
 from pet.models import Pet 
 
 # Create your views here.
-# @csrf_exempt
-# def sign_up(request):
-#     if request.method == 'POST':
-#         try:
-#             email = request.POST["email"]
-#             username = request.POST["username"]
-#             password = request.POST["password"]
-#             phone = request.POST["phone"]
-
-#             validate_password(password) # 驗證密碼是否符合要求
-            
-#             # 用戶名和電子郵件不能重複
-#             if Profile.objects.filter(email=email).exists():
-#                 return JsonResponse({'status': 'error', 'message': '電子郵件已存在'})
-#             if Profile.objects.filter(username=username).exists():
-#                 return JsonResponse({'status': 'error', 'message': '用戶名已存在'})
-            
-#             user = User.objects.create_user(username=username, email=email, password=password)
-            
-#             profile = Profile.objects.create(user=user, phone=phone) 
-#             profile.save()
-
-
-#             profile_info = {
-#                 'uid': profile.uid,
-#                 'email': profile.email,
-#                 'phone': profile.phone,
-#                 'username': profile.username,
-#                 'date': profile.date,
-#             }
-
-#             return JsonResponse({'status': 'success', 'profile': profile_info})
-
-#         except ValidationError as e:
-#             return JsonResponse({'status': 'ValidationError', 'message': e.messages})
-        
-#         except Exception as e:
-#             return JsonResponse({'status': 'ExceptionError', 'message': str(e)})
-#     else:
-#         return HttpResponseNotAllowed(['POST'])
-    
 @csrf_exempt
 def sign_up(request):
     if request.method == 'POST':
@@ -68,9 +27,9 @@ def sign_up(request):
 
             # 用戶名和電子郵件不能重複
             if Profile.objects.filter(email=email).exists():
-                return JsonResponse({'status': 'error', 'message': '電子郵件已存在'})
+                return JsonResponse({'status': 400, 'message': '電子郵件已存在'})
             if Profile.objects.filter(username=username).exists():
-                return JsonResponse({'status': 'error', 'message': '用戶名已存在'})
+                return JsonResponse({'status': 400, 'message': '用戶名已存在'})
             
             profile = Profile.objects.create(email = email, username = username, password = encrypted_password, phone = phone) 
             profile.save()
@@ -83,13 +42,13 @@ def sign_up(request):
                 'username': profile.username,
                 'date': profile.date,
             }
-            return JsonResponse({'status': 'success', 'profile': profile_info})
+            return JsonResponse({'status': 200, 'profile': profile_info})
 
         except ValidationError as e:
-            return JsonResponse({'status': 'ValidationError', 'message': e.messages})
+            return JsonResponse({'status': 400, 'message': e.messages})
         
         except Exception as e:
-            return JsonResponse({'status': 'ExceptionError', 'message': str(e)})
+            return JsonResponse({'status': 500, 'message': str(e)})
     else:
         return HttpResponseNotAllowed(['POST'])
 
@@ -103,12 +62,12 @@ def login_view(request):
         if users.exists():
             user = users.first() 
             if user.authenticate(password):
-                request.session['uuid'] = str(user.uid)
-                return JsonResponse({'status': 'success', 'message': '登入成功'})
+                request.session['uid'] = str(user.uid)
+                return JsonResponse({'status': 200, 'message': '登入成功'})
             else:
-                return JsonResponse({'status': 'error', 'message': '密碼錯誤'})
+                return JsonResponse({'status': 400, 'message': '密碼錯誤'})
         else:
-            return JsonResponse({'status': 'error', 'message': '用戶不存在'})
+            return JsonResponse({'status': 400, 'message': '用戶不存在'})
     else:
         # Render the login form
         # return render(request, 'login.html', locals())
