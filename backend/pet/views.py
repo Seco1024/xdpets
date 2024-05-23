@@ -24,7 +24,7 @@ def getAllPets(request):
                         'region': pet.region,
                         'category': pet.category,
                         'gender': pet.gender,
-                        'image_url': settings.MEDIA_ROOT + pet_images[0].image.url if pet_images else None
+                        'image_url': pet_images[0].image.url if pet_images else None
                     })
 
                 return JsonResponse({'status': 200, 'success': True, 'allPetInformation': pet_info})
@@ -49,7 +49,7 @@ def getPet(request):
         try:
             pet = Pet.objects.get(pet_id=pet_id)
             pet_images = PetImage.objects.filter(pet=pet)
-            images_urls = [settings.MEDIA_ROOT + image.image.url for image in pet_images]
+            images_urls = [image.image.url for image in pet_images]
             
             pet_info = {
                 'pet_id': str(pet.pet_id),

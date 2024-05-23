@@ -20,6 +20,8 @@ from user.views import *
 from match.views import *
 from administrator.views import *
 from pet.views import *
+from django.conf.urls.static import static
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -38,4 +40,5 @@ urlpatterns = [
     path('administrator/judgePet', judgePet),
     path('pet/getAllPets/', getAllPets),
     path('pet/getPet/', getPet),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

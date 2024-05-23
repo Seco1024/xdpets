@@ -34,8 +34,7 @@ ALLOWED_HOSTS = []
 
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'pet')
-
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 INSTALLED_APPS = [
@@ -48,10 +47,13 @@ INSTALLED_APPS = [
     'user.apps.UserConfig',
     'pet.apps.PetConfig',
     'match.apps.MatchConfig',
+    'corsheaders',
     'administrator.apps.AdministratorConfig',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -93,9 +95,11 @@ DATABASES = {
         'USER': os.getenv('MYSQL_USER'),
         'PASSWORD': os.getenv('MYSQL_PASSWORD'),
         'HOST': os.getenv('MYSQL_HOST'),
-        'PORT': '3306', 
+        'PORT': '3306',
     }
 }
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -119,13 +123,13 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'zh-hant' # 繁體中文
+LANGUAGE_CODE = 'zh-hant'  # 繁體中文
 
-TIME_ZONE = 'Asia/Taipei' # 台北時區
+TIME_ZONE = 'Asia/Taipei'  # 台北時區
 
-USE_I18N = True # 啟用國際化
+USE_I18N = True  # 啟用國際化
 
-USE_TZ = False # 不啟用時區支持
+USE_TZ = False  # 不啟用時區支持
 
 
 # Static files (CSS, JavaScript, Images)
