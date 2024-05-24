@@ -11,7 +11,10 @@ services:
       - redis
 
   redis:
-    image: redis:6
+    image: redis:6.2
+    container_name: redis
+    ports:
+      - "6379:6379"
 
   celery:
     build: .
@@ -22,6 +25,7 @@ services:
       - redis
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
 
   celery-beat:
     build: .
@@ -32,3 +36,4 @@ services:
       - redis
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0

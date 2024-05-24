@@ -3,6 +3,7 @@ from celery import shared_task
 from django.core.mail import send_mail
 from django.conf import settings
 from django.db.models import Q
+from django.core.cache import cache
 from .models import Preference
 from pet.models import Pet
 from user.models import Profile
@@ -32,8 +33,14 @@ def check_preferences_and_send_emails():
         if preference.ligated is not None:
             query &= Q(ligated=preference.ligated)
         
-        # 查找匹配的寵物
         matching_pets = pets.filter(query)
+        
+        for pet in matching_pets:
+            cache_key = f"matched_{preference.preferenceId}_{pet.pet_id}"
+            if not cache.get(cache_key):
+                cache.set(cache_key, True, timeout=None)
+            else:
+                matching_pets = matching_pets.exclude(pet_id=pet.pet_id)
 
         if matching_pets.exists():
             pet_info = '\n'.join([f"{pet.pet_name} ({pet.breed})" for pet in matching_pets])
