@@ -63,57 +63,91 @@ def login_view(request):
             user = users.first() 
             if user.authenticate(password):
                 request.session['uid'] = str(user.uid)
-                return JsonResponse({'status': 200, 'message': '登入成功'})
+                return JsonResponse({'status': 200, 'message': '登入成功'}, status=200)
             else:
-                return JsonResponse({'status': 400, 'message': '密碼錯誤'})
+                return JsonResponse({'status': 400, 'message': '密碼錯誤'}, status=400)
         else:
-            return JsonResponse({'status': 400, 'message': '用戶不存在'})
+            return JsonResponse({'status': 400, 'message': '用戶不存在'}, status=400)
     else:
-        # Render the login form
-        # return render(request, 'login.html', locals())
         return HttpResponseNotAllowed(['POST'])
     
 @csrf_exempt
 def add_new_pet(request):
     if request.method == 'POST':
-        user_id = request.POST['uid']
-        pet_name = request.POST['petName']
-        pet_breed = request.POST['petBreed']
-        pet_category = request.POST['petCategory']
-        pet_gender = request.POST['petGender']
-        pet_age = request.POST['petAge']
+        user_id = request.POST['ownerId']
+        pet_name = request.POST['name']
+        breed = request.POST['breed']
+        category = request.POST['category']
+        gender = request.POST['gender']
+        size = request.POST['size']
+        region = request.POST['region']
+        age = request.POST['age']
+        coat_color = request.POST['coar_color']
+        ligated = request.POST['ligated']
+        info = request.POST['info']
+        legal = request.POST['legal']
+        
+        try:
+            owner = Profile.objects.get(uid=user_id)
+        except Profile.DoesNotExist:
+            return JsonResponse({'status': 404, 'message': '找不到用户'}, status=404)
 
         try:
             # 假設Pet模型中有一個外鍵指向User模型
-            pet = Pet.objects.create(ownerId=user_id, name=pet_name, breed=pet_breed, 
-                                     category=pet_category, gender = pet_gender, age = pet_age, )
-            return JsonResponse({'status': 200, 'success': True, 'userId': pet.ownerId, 'petName': pet.name, 
-                                 'breed': pet.breed, 'category': pet.category, 'gender': pet.gender, 'age': pet.age})
+            pet = Pet.objects.create(owner=owner, 
+                                     pet_name=pet_name, 
+                                     breed=breed, 
+                                     category=category, 
+                                     gender=gender, 
+                                     age=age, 
+                                     size=size, 
+                                     region=region, 
+                                     coat_color=coat_color,
+                                     ligated=ligated,
+                                     info=info,
+                                     legal=legal)
+            pet.save()
+            
+            pet_info = {
+                'pet_id': pet.pet_id,
+                'pet_name': pet.pet_name,
+                'breed': pet.breed,
+                'category': pet.category,
+                'gender': pet.gender,
+                'age': pet.age,
+                'size': pet.size,
+                'region': pet.region,
+                'coat_color': pet.coat_color,
+                'ligated': pet.ligated,
+                'info': pet.info,
+                'legal': pet.legal,
+            }
+            return JsonResponse({'status': 200, 'success': True, 'pet_info': pet_info}, status=200)
             # return JsonResponse({'status': 200, 'success': True, 'pet_info': pet.objects.all()})
         except Exception as e:
-            return JsonResponse({'status': 500, 'success': False, 'message': str(e)})
+            return JsonResponse({'status': 500, 'success': False, 'message': str(e)}, status=500)
 
     else:
         # return HttpResponseNotAllowed(['POST'])
-        return JsonResponse({'status': 400, 'success': False, 'message': '只接受POST請求'})
+        return JsonResponse({'status': 400, 'success': False, 'message': '只接受POST請求'}, status=400)
 
-# @csrf_exempt
-# def delete_pet(request):
-#     if request.method == 'POST':
-#         user_id = request.POST['userId']
-#         pet_id = request.POST['petId']
-#         # 驗證和處理輸入...
+@csrf_exempt
+def delete_pet(request):
+    if request.method == 'POST':
+        user_id = request.POST['userId']
+        pet_id = request.POST['petId']
+        # 驗證和處理輸入...
 
-#         try:
-#             pet = Pet.objects.get(id=pet_id, owner__uid=user_id)  # 假設Pet模型中有一個外鍵指向Users模型的uid字段
-#             pet.delete()
-#             return JsonResponse({'status': 200, 'success': True, 'message': '寵物刪除成功'})
-#         except Pet.DoesNotExist:
-#             return JsonResponse({'status': 404, 'success': False, 'message': '寵物不存在'})
-#         except Exception as e:
-#             return JsonResponse({'status': 500, 'success': False, 'message': str(e)})
+        try:
+            pet = Pet.objects.get(id=pet_id, owner__uid=user_id)  # 假設Pet模型中有一個外鍵指向Users模型的uid字段
+            pet.delete()
+            return JsonResponse({'status': 200, 'success': True, 'message': '寵物刪除成功'}, status=200)
+        except Pet.DoesNotExist:
+            return JsonResponse({'status': 404, 'success': False, 'message': '寵物不存在'}, status=404)
+        except Exception as e:
+            return JsonResponse({'status': 500, 'success': False, 'message': str(e)}, status=500)
 
-#     return JsonResponse({'status': 400, 'success': False, 'message': '只接受POST請求'})
+    return JsonResponse({'status': 400, 'success': False, 'message': '只接受POST請求'}, status=400)
 
 # @require_http_methods(["GET"])
 # def get_information(request):
