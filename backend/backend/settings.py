@@ -32,6 +32,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  
+CELERY_RESULT_BACKEND = 'django-db'  
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -49,6 +52,9 @@ INSTALLED_APPS = [
     'match.apps.MatchConfig',
     'corsheaders',
     'administrator.apps.AdministratorConfig',
+    'django_celery_beat',
+    'django_celery_results',
+    'celery.schedules'
 ]
 
 MIDDLEWARE = [
@@ -84,6 +90,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
+EMAIL_HOST = 'smtp.gmail.com'  
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_PORT = 587 
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False  
+EMAIL_HOST_USER = os.getenv('EMAIL_USER')  
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')  
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
