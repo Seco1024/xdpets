@@ -1,5 +1,6 @@
 from django.db import models
 from user.models import Profile
+from django.utils import timezone
 import uuid
 # Create your models here.
 
@@ -14,7 +15,7 @@ class Pet(models.Model):
     age = models.CharField(max_length=10)
     coat_color = models.CharField(max_length=10)
     ligated = models.BooleanField()
-    post_date = models.DateTimeField()
+    post_date = models.DateTimeField(default=timezone.now)
     info = models.TextField()
     legal = models.BooleanField()
     owner = models.ForeignKey(Profile, on_delete=models.CASCADE)

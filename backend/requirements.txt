@@ -5,3 +5,7 @@ mysqlclient
 python-dotenv
 django-cors-headers
 Pillow
+django-celery-beat 
+django-celery-results
+redis
+django-redis

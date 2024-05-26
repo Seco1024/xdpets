@@ -25,20 +25,31 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    # User
     path('user/login/', login_view),
     path('user/signup/', sign_up),
+    path('user/getInformation/',get_information),
     path('user/addNewPet/', add_new_pet),
-    # path('user/getInformation/',get_information),
+    path('user/deletePet/', delete_pet),
+    path('user/updatePet/', update_pet),
+    
+    # Match
     path('match/addPreference', addPreference),
     path('match/getPreference', getPreference),
     path('match/deletePreference', deletePreference),
     path('match/updatePreference', updatePreference),
+    
+    # Administrator
     path('administrator/addAdministrator', addAdministrator),
     path('administrator/loginAdministrator', loginAdministrator),
     path('administrator/deleteAdministrator', deleteAdministrator),
     path('administrator/deletePet', deletePet),
     path('administrator/judgePet', judgePet),
+    
+    # Pet
     path('pet/getAllPets/', getAllPets),
     path('pet/getPet/', getPet),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
