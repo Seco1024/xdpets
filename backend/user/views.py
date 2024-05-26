@@ -9,9 +9,11 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 
 from .models import Profile
-from pet.models import Pet 
+from pet.models import Pet
 
 # Create your views here.
+
+
 @csrf_exempt
 def sign_up(request):
     if request.method == 'POST':
@@ -21,19 +23,19 @@ def sign_up(request):
             password = request.POST["password"]
             phone = request.POST["phone"]
 
-            validate_password(password) # 驗證密碼是否符合要求
-            
-            encrypted_password = make_password(password) # 加密密碼
+            validate_password(password)  # 驗證密碼是否符合要求
+
+            encrypted_password = make_password(password)  # 加密密碼
 
             # 用戶名和電子郵件不能重複
             if Profile.objects.filter(email=email).exists():
-                return JsonResponse({'status': 400, 'message': '電子郵件已存在'})
+                return JsonResponse({'status': 400, 'message': '電子郵件已存在'}, status=400)
             if Profile.objects.filter(username=username).exists():
-                return JsonResponse({'status': 400, 'message': '用戶名已存在'})
-            
-            profile = Profile.objects.create(email = email, username = username, password = encrypted_password, phone = phone) 
-            profile.save()
+                return JsonResponse({'status': 400, 'message': '用戶名已存在'}, status=400)
 
+            profile = Profile.objects.create(
+                email=email, username=username, password=encrypted_password, phone=phone)
+            profile.save()
 
             profile_info = {
                 'uid': profile.uid,
@@ -42,25 +44,26 @@ def sign_up(request):
                 'username': profile.username,
                 'date': profile.date,
             }
-            return JsonResponse({'status': 200, 'profile': profile_info})
+            return JsonResponse({'status': 200, 'profile': profile_info}, status=200)
 
         except ValidationError as e:
-            return JsonResponse({'status': 400, 'message': e.messages})
-        
+            return JsonResponse({'status': 400, 'message': e.messages}, status=400)
+
         except Exception as e:
-            return JsonResponse({'status': 500, 'message': str(e)})
+            return JsonResponse({'status': 500, 'message': str(e)}, status=500)
     else:
         return HttpResponseNotAllowed(['POST'])
+
 
 @csrf_exempt
 def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        
+
         users = Profile.objects.filter(username=username)
         if users.exists():
-            user = users.first() 
+            user = users.first()
             if user.authenticate(password):
                 request.session['uid'] = str(user.uid)
                 return JsonResponse({'status': 200, 'message': '登入成功'}, status=200)
@@ -70,7 +73,8 @@ def login_view(request):
             return JsonResponse({'status': 400, 'message': '用戶不存在'}, status=400)
     else:
         return HttpResponseNotAllowed(['POST'])
-    
+
+
 @csrf_exempt
 def add_new_pet(request):
     if request.method == 'POST':
@@ -86,7 +90,7 @@ def add_new_pet(request):
         ligated = request.POST['ligated']
         info = request.POST['info']
         legal = request.POST['legal']
-        
+
         try:
             owner = Profile.objects.get(uid=user_id)
         except Profile.DoesNotExist:
@@ -94,20 +98,20 @@ def add_new_pet(request):
 
         try:
             # 假設Pet模型中有一個外鍵指向User模型
-            pet = Pet.objects.create(owner=owner, 
-                                     pet_name=pet_name, 
-                                     breed=breed, 
-                                     category=category, 
-                                     gender=gender, 
-                                     age=age, 
-                                     size=size, 
-                                     region=region, 
+            pet = Pet.objects.create(owner=owner,
+                                     pet_name=pet_name,
+                                     breed=breed,
+                                     category=category,
+                                     gender=gender,
+                                     age=age,
+                                     size=size,
+                                     region=region,
                                      coat_color=coat_color,
                                      ligated=ligated,
                                      info=info,
                                      legal=legal)
             pet.save()
-            
+
             pet_info = {
                 'pet_id': pet.pet_id,
                 'pet_name': pet.pet_name,
@@ -131,6 +135,7 @@ def add_new_pet(request):
         # return HttpResponseNotAllowed(['POST'])
         return JsonResponse({'status': 400, 'success': False, 'message': '只接受POST請求'}, status=400)
 
+
 @csrf_exempt
 def delete_pet(request):
     if request.method == 'POST':
@@ -139,7 +144,8 @@ def delete_pet(request):
         # 驗證和處理輸入...
 
         try:
-            pet = Pet.objects.get(id=pet_id, owner__uid=user_id)  # 假設Pet模型中有一個外鍵指向Users模型的uid字段
+            # 假設Pet模型中有一個外鍵指向Users模型的uid字段
+            pet = Pet.objects.get(id=pet_id, owner__uid=user_id)
             pet.delete()
             return JsonResponse({'status': 200, 'success': True, 'message': '寵物刪除成功'}, status=200)
         except Pet.DoesNotExist:
@@ -163,15 +169,9 @@ def delete_pet(request):
 #             'phone': user.phone,
 #         }
 #         return JsonResponse({'status': 'success', 'data': user_info})
-    
+
 #     except Profile.DoesNotExist:
 #         return JsonResponse({'status': 'error', 'message': '用戶不存在'})
 
 #     except Exception as e:
 #         return JsonResponse({'status': 'error', 'message': str(e)})
-
-
-
-
-
-
