@@ -42,8 +42,8 @@ def addPreference(request):
 @require_http_methods(["GET"])
 def getPreference(request):
     try:
-        data = json.loads(request.body)
-        preferenceInfo = Preference.objects.filter(uid=data['userId'])
+        user_id = request.GET.get('userId')
+        preferenceInfo = Preference.objects.filter(uid=user_id)
         preferences_json = serializers.serialize('json', preferenceInfo)
         
         return JsonResponse({"preferences": json.loads(preferences_json)}, status=200)
