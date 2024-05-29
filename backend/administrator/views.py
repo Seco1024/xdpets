@@ -91,7 +91,7 @@ def deletePet(request):
         return JsonResponse({"message": str(e)}, status=500)
     
 @csrf_exempt
-@require_http_methods(["POST"])
+@require_http_methods(["PUT"])
 def judgePet(request):
     try:
         data = json.loads(request.body)
@@ -106,3 +106,30 @@ def judgePet(request):
         return JsonResponse({"message": "Invalid JSON."}, status=400)
     except Exception as e:
         return JsonResponse({"message": str(e)}, status=500)
+
+@csrf_exempt
+@require_http_methods(["GET"])
+def getPetList(request):
+    try:
+        pet_list = Pet.objects.filter()
+        pet_list_json = []
+        for pet in pet_list:
+            pet_list_json.append({"petId": str(pet.pet_id), "petName": pet.pet_name, "isLegal": pet.legal, "userId": str(pet.owner.uid)})
+        return JsonResponse({"petList": pet_list_json}, status=200)
+    
+    except Exception as e:
+        return JsonResponse({"message": str(e)}, status=500)
+    
+@csrf_exempt
+@require_http_methods(["GET"])
+def isAdmin(request):
+    try:
+        userId = request.GET.get("userId")
+        if Administrator.objects.filter(user_id=userId).exists():
+            return JsonResponse({"isAdmin": True}, status=200)
+        else:
+            return JsonResponse({"isAdmin": False}, status=200)
+    
+    except Exception as e:
+        return JsonResponse({"message": str(e)}, status=500)
+
