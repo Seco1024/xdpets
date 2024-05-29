@@ -109,12 +109,27 @@ def judgePet(request):
 
 @csrf_exempt
 @require_http_methods(["GET"])
-def getPetList(request):
+def getJudgedPets(request):
     try:
-        pet_list = Pet.objects.filter()
+        #找出所有legal 欄位非空的寵物
+        pet_list = Pet.objects.exclude(legal=None)
         pet_list_json = []
         for pet in pet_list:
             pet_list_json.append({"petId": str(pet.pet_id), "petName": pet.pet_name, "isLegal": pet.legal, "userId": str(pet.owner.uid)})
+        return JsonResponse({"petList": pet_list_json}, status=200)
+    
+    except Exception as e:
+        return JsonResponse({"message": str(e)}, status=500)
+
+@csrf_exempt
+@require_http_methods(["GET"])
+def getUnjudgedPets(request):
+    try:
+        #找出所有legal 欄位為空的寵物
+        pet_list = Pet.objects.filter(legal=None)
+        pet_list_json = []
+        for pet in pet_list:
+            pet_list_json.append({"petId": str(pet.pet_id), "petName": pet.pet_name, "userId": str(pet.owner.uid)})
         return JsonResponse({"petList": pet_list_json}, status=200)
     
     except Exception as e:
@@ -133,3 +148,15 @@ def isAdmin(request):
     except Exception as e:
         return JsonResponse({"message": str(e)}, status=500)
 
+@csrf_exempt
+@require_http_methods(["GET"])
+def getUnjudgedPetsList(request):
+    try:
+        pet_list = Pet.objects.filter(legal=None)
+        pet_list_json = []
+        for pet in pet_list:
+            pet_list_json.append({"petId": str(pet.pet_id), "petName": pet.pet_name, "isLegal": pet.legal, "userId": str(pet.owner.uid)})
+        return JsonResponse({"petList": pet_list_json}, status=200)
+    
+    except Exception as e:
+        return JsonResponse({"message": str(e)}, status=500)

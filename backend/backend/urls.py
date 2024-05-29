@@ -46,7 +46,8 @@ urlpatterns = [
     path('administrator/deleteAdministrator', deleteAdministrator),
     path('administrator/deletePet', deletePet),
     path('administrator/judgePet', judgePet),
-    path('administrator/getPetList', getPetList),
+    path('administrator/getJudgedPets', getJudgedPets),
+    path('administrator/getUnjudgedPets', getUnjudgedPets),
     path('administrator/isAdmin', isAdmin),
     
     # Pet
