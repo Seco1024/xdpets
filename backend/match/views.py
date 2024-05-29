@@ -43,10 +43,22 @@ def addPreference(request):
 def getPreference(request):
     try:
         user_id = request.GET.get('userId')
+        preference_json = []
         preferenceInfo = Preference.objects.filter(uid=user_id)
-        preferences_json = serializers.serialize('json', preferenceInfo)
-        
-        return JsonResponse({"preferences": json.loads(preferences_json)}, status=200)
+        for preference in preferenceInfo:
+            preference_json.append({
+                "preferenceId": preference.preferenceId,
+                "breed": preference.breed,
+                "category": preference.category,
+                "gender": preference.gender,
+                "size": preference.size,
+                "region": preference.region,
+                "age": preference.age,
+                "coat_color": preference.coat_color,
+                "ligated": preference.ligated
+            })
+            
+        return JsonResponse({"message": f"Preference get successfully.", "preferenceInfo": preference_json}, status=200)
     
     except Profile.DoesNotExist:
         return JsonResponse({"message": "User profile not found."}, status=404)
