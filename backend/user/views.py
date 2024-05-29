@@ -134,7 +134,6 @@ def add_new_pet(request):
         coat_color = request.POST['coar_color']
         ligated = request.POST['ligated']
         info = request.POST['info']
-        legal = request.POST['legal']
 
         try:
             owner = Profile.objects.get(uid=user_id)
