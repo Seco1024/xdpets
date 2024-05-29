@@ -17,7 +17,7 @@ class Pet(models.Model):
     ligated = models.BooleanField()
     post_date = models.DateTimeField(default=timezone.now)
     info = models.TextField()
-    legal = models.BooleanField()
+    legal = models.BooleanField(blank=True, null=True)
     owner = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
 

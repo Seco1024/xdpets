@@ -64,7 +64,6 @@ def getPet(request):
                 'ligated': pet.ligated,
                 'post_date': pet.post_date,
                 'info': pet.info,
-                'legal': pet.legal,
                 'owner_id': pet.owner.uid,
                 'images_urls': images_urls,
             }
