@@ -165,7 +165,7 @@ def add_new_pet(request):
                                      coat_color=coat_color,
                                      ligated=ligated,
                                      info=info,
-                                     legal=legal)
+                                     )
             pet.save()
 
             pet_info = {
