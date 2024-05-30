@@ -135,7 +135,7 @@ def getJudgedPets(request):
 def getUnjudgedPets(request):
     try:
         # 找出所有legal 欄位為空的寵物
-        pet_list = Pet.objects.filter(legal=0)
+        pet_list = Pet.objects.filter(legal=None)
         pet_list_json = []
         for pet in pet_list:
             pet_list_json.append(
