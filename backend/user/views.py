@@ -64,7 +64,7 @@ def login_view(request):
             user = users.first()
             if user.authenticate(password):
                 request.session['uid'] = str(user.uid)
-                return JsonResponse({'status': 200, 'message': '登入成功'}, status=200)
+                return JsonResponse({'status': 200, 'message': '登入成功', 'uid': user.uid}, status=200)
             else:
                 return JsonResponse({'status': 400, 'message': '密碼錯誤'}, status=400)
         else:
@@ -73,16 +73,16 @@ def login_view(request):
         return HttpResponseNotAllowed(['POST'])
     
 
-@require_http_methods(["GET"])
-def get_uid(request):
-    if request.method == 'GET':
-        uid = request.GET['uid']
-        if uid is not None:
-            # Return a JSON response with the UID
-            return JsonResponse({'uid': uid})
-    else:
-        # Return an error response if UID is not provided
-        return JsonResponse({'error': 'UID not provided'}, status=400)
+# @require_http_methods(["GET"])
+# def get_uid(request):
+#     if request.method == 'GET':
+#         uid = request.GET['uid']
+#         if uid is not None:
+#             # Return a JSON response with the UID
+#             return JsonResponse({'uid': uid})
+#     else:
+#         # Return an error response if UID is not provided
+#         return JsonResponse({'error': 'UID not provided'}, status=400)
     
 
 @require_http_methods(["GET"])
