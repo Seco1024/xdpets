@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 
 from .models import Profile
 from pet.models import Pet
-
+from .decorators import login_required
 # Create your views here.
 @csrf_exempt
 def sign_up(request):
@@ -72,7 +72,10 @@ def login_view(request):
     else:
         return HttpResponseNotAllowed(['POST'])
     
-
+@login_required
+def some_protected_view(request):
+    # 示例受保护视图
+    return JsonResponse({'status': 200, 'message': '已登入'}, status = 200)
 # @require_http_methods(["GET"])
 # def get_uid(request):
 #     if request.method == 'GET':
