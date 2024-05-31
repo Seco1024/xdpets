@@ -72,21 +72,6 @@ def login_view(request):
     else:
         return HttpResponseNotAllowed(['POST'])
     
-@login_required
-def some_protected_view(request):
-    # 示例受保护视图
-    return JsonResponse({'status': 200, 'message': '已登入'}, status = 200)
-# @require_http_methods(["GET"])
-# def get_uid(request):
-#     if request.method == 'GET':
-#         uid = request.GET['uid']
-#         if uid is not None:
-#             # Return a JSON response with the UID
-#             return JsonResponse({'uid': uid})
-#     else:
-#         # Return an error response if UID is not provided
-#         return JsonResponse({'error': 'UID not provided'}, status=400)
-    
 
 @require_http_methods(["GET"])
 def get_information(request):
