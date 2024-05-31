@@ -155,6 +155,12 @@ def add_new_pet(request):
                                      info=info,
                                      )
             pet.save()
+            
+            if 'images' in request.FILES:
+                for image in request.FILES.getlist('images'):
+                    PetImage.objects.create(pet=pet, image=image)
+            pet_images = PetImage.objects.filter(pet=pet)
+            images_urls = [image.image.url for image in pet_images]
 
             pet_info = {
                 'pet_id': pet.pet_id,
@@ -169,11 +175,10 @@ def add_new_pet(request):
                 'ligated': pet.ligated,
                 'post_date': pet.post_date,
                 'info': pet.info,
+                'images_urls': images_urls,
             }
             
-            if 'images' in request.FILES:
-                for image in request.FILES.getlist('images'):
-                    PetImage.objects.create(pet=pet, image=image)
+            
             
             pet.save()
             return JsonResponse({'status': 200, 'success': True, 'pet_info': pet_info}, status=200)
@@ -213,7 +218,7 @@ def update_pet(request):
         pet_id = request.POST.get('petId')
 
         if not user_id or not pet_id:
-            return JsonResponse({'status': 400, 'success': False, 'message': '缺少必填參數'}, status=400)
+            return JsonResponse({'status': 400, 'success': False, 'message': '使用者id或寵物id未填寫'}, status=400)
 
         pet = Pet.objects.filter(owner__uid=user_id, pet_id=pet_id).first()
         if not pet:
@@ -247,8 +252,19 @@ def update_pet(request):
             pet.coat_color = coat_color
             pet.ligated = ligated
             pet.info = info
-            pet.save()
+            pet.save()  
         
+            if 'images' in request.FILES:
+                # 刪除原有的圖片
+                PetImage.objects.filter(pet=pet).delete()
+                
+                # 新增新的圖片
+                for image in request.FILES.getlist('images'):
+                    PetImage.objects.create(pet=pet, image=image)
+
+            pet_images = PetImage.objects.filter(pet=pet)
+            images_urls = [image.image.url for image in pet_images]
+
             pet_info = {
                 'pet_id': pet.pet_id,
                 'pet_name': pet.pet_name,
@@ -263,6 +279,7 @@ def update_pet(request):
                 'post_date': pet.post_date,
                 'info': pet.info,
                 'legal': pet.legal,
+                'images_urls': images_urls,
             }
             return JsonResponse({'status': 200, 'success': True, 'pet_info': pet_info}, status=200)
         
