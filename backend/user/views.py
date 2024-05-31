@@ -9,7 +9,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 
 from .models import Profile
-from pet.models import Pet
+from pet.models import Pet, PetImage
 from .decorators import login_required
 # Create your views here.
 @csrf_exempt
@@ -131,7 +131,7 @@ def add_new_pet(request):
         size = request.POST['size']
         region = request.POST['region']
         age = request.POST['age']
-        coat_color = request.POST['coar_color']
+        coat_color = request.POST['coat_color']
         ligated = request.POST['ligated']
         info = request.POST['info']
 
@@ -169,8 +169,13 @@ def add_new_pet(request):
                 'ligated': pet.ligated,
                 'post_date': pet.post_date,
                 'info': pet.info,
-                'legal': pet.legal,
             }
+            
+            if 'images' in request.FILES:
+                for image in request.FILES.getlist('images'):
+                    PetImage.objects.create(pet=pet, image=image)
+            
+            pet.save()
             return JsonResponse({'status': 200, 'success': True, 'pet_info': pet_info}, status=200)
 
         except Exception as e:
@@ -224,7 +229,6 @@ def update_pet(request):
         coat_color = request.POST.get('coar_color', pet.coat_color)
         ligated = request.POST.get('ligated', pet.ligated)
         info = request.POST.get('info', pet.info)
-        legal = request.POST.get('legal', pet.legal)
 
         try:
             owner = Profile.objects.get(uid=user_id)
@@ -243,7 +247,6 @@ def update_pet(request):
             pet.coat_color = coat_color
             pet.ligated = ligated
             pet.info = info
-            pet.legal = legal
             pet.save()
         
             pet_info = {
