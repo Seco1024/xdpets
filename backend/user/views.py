@@ -178,13 +178,11 @@ def add_new_pet(request):
                 'images_urls': images_urls,
             }
             
-            
-            
             pet.save()
             return JsonResponse({'status': 200, 'success': True, 'pet_info': pet_info}, status=200)
 
         except Exception as e:
-            return JsonResponse({'status': 500, 'success': False, 'message': str(e)}, status=500)
+            return JsonResponse({'status': 400, 'success': False, 'message': str(e)}, status=400)
 
     else:
         # return HttpResponseNotAllowed(['POST'])
