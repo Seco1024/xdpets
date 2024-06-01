@@ -182,7 +182,7 @@ def add_new_pet(request):
             return JsonResponse({'status': 200, 'success': True, 'pet_info': pet_info}, status=200)
 
         except Exception as e:
-            return JsonResponse({'status': 400, 'success': False, 'message': str(e)}, status=400)
+            return JsonResponse({'status': 500, 'success': False, 'message': str(e)}, status=500)
 
     else:
         # return HttpResponseNotAllowed(['POST'])

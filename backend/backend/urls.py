@@ -28,6 +28,7 @@ urlpatterns = [
 
     # User
     path('user/login/', login_view),
+    # path('user/getId/', get_uid),
     path('user/signup/', sign_up),
     path('user/getInformation/',get_information),
     path('user/addNewPet/', add_new_pet),
