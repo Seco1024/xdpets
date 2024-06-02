@@ -7,32 +7,24 @@ from django.conf import settings
 
 def getAllPets(request):
     if request.method == 'GET':
-        user_id = request.GET.get('user_id', None)
-        if user_id is None:
-            return JsonResponse({'status': 400, 'success': False, 'message': 'Missing user_id parameter'})
-        
-        try:
-            pets = Pet.objects.all()
-            if pets.exists():
-                pet_info = []
-                for pet in pets:
-                    pet_images = pet.images.all()
-                    pet_info.append({
-                        'pet_id': str(pet.pet_id),
-                        'pet_name': pet.pet_name,
-                        'breed': pet.breed,
-                        'region': pet.region,
-                        'category': pet.category,
-                        'gender': pet.gender,
-                        'image_url': pet_images[0].image.url if pet_images else None
-                    })
+        pets = Pet.objects.filter(legal=True)
+        if pets.exists():
+            pet_info = []
+            for pet in pets:
+                pet_images = pet.images.all()
+                pet_info.append({
+                    'pet_id': str(pet.pet_id),
+                    'pet_name': pet.pet_name,
+                    'breed': pet.breed,
+                    'region': pet.region,
+                    'category': pet.category,
+                    'gender': pet.gender,
+                    'image_url': pet_images[0].image.url if pet_images else None
+                })
 
-                return JsonResponse({'status': 200, 'success': True, 'allPetInformation': pet_info})
-            else:
-                return JsonResponse({'status': 200, 'success': True, 'message': '尚無寵物'})
-        except Profile.DoesNotExist:
-            return JsonResponse({'status': 404, 'success': False, 'message': 'User not found'})
-    
+            return JsonResponse({'status': 200, 'success': True, 'allPetInformation': pet_info})
+        else:
+            return JsonResponse({'status': 200, 'success': True, 'message': '尚無寵物'})    
     else:
         return JsonResponse({'status': 405, 'success': False, 'message': 'Method not allowed'})
 
