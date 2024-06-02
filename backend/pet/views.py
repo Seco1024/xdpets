@@ -30,12 +30,11 @@ def getAllPets(request):
 
 
 def getPet(request):
-    print(settings.MEDIA_ROOT)
+    #print(settings.MEDIA_ROOT)
     if request.method == 'GET':
-        user_id = request.GET.get('user_id', None)
         pet_id = request.GET.get('pet_id', None)
         
-        if not user_id or not pet_id:
+        if not pet_id:
             return JsonResponse({'status': 400, 'success': False, 'message': 'Missing user_id or pet_id parameter'})
 
         try:
@@ -62,7 +61,5 @@ def getPet(request):
             return JsonResponse({'status': 200, 'success': True, 'PetInformation': pet_info})
         except Pet.DoesNotExist:
             return JsonResponse({'status': 404, 'success': False, 'message': 'Pet not found'})
-        except Profile.DoesNotExist:
-            return JsonResponse({'status': 404, 'success': False, 'message': 'User not found'})
     else:
         return JsonResponse({'status': 405, 'success': False, 'message': 'Method not allowed'})
