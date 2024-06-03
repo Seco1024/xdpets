@@ -30,31 +30,30 @@ urlpatterns = [
     path('user/login/', login_view),
     # path('user/getId/', get_uid),
     path('user/signup/', sign_up),
-    path('user/getInformation/',get_information),
-    path('user/addNewPet/', add_new_pet),
-    path('user/deletePet/', delete_pet),
-    path('user/updatePet/', update_pet),
-    
+    path('user/getInformation/', get_information),  # login required
+    path('user/addNewPet/', add_new_pet),  # login required
+    path('user/deletePet/', delete_pet),  # login required
+    path('user/updatePet/', update_pet),  # login required
+
     # Match
-    path('match/addPreference', addPreference),
-    path('match/getPreference', getPreference),
-    path('match/deletePreference', deletePreference),
-    path('match/updatePreference', updatePreference),
-    
+    path('match/addPreference', addPreference),  # login required
+    path('match/getPreference', getPreference),  # login required
+    path('match/deletePreference', deletePreference),  # login required
+    path('match/updatePreference', updatePreference),  # login required
+
     # Administrator
-    path('administrator/addAdministrator', addAdministrator),
-    path('administrator/loginAdministrator', loginAdministrator),
-    path('administrator/deleteAdministrator', deleteAdministrator),
-    path('administrator/deletePet', deletePet),
-    path('administrator/judgePet', judgePet),
-    path('administrator/getJudgedPets', getJudgedPets),
-    path('administrator/getUnjudgedPets', getUnjudgedPets),
+    path('administrator/addAdministrator', addAdministrator),  # neglect
+    path('administrator/loginAdministrator', loginAdministrator),  # neglect
+    path('administrator/deleteAdministrator', deleteAdministrator),  # neglect
+    path('administrator/deletePet', deletePet),  # superuser required
+    path('administrator/judgePet', judgePet),  # superuser required
+    path('administrator/getJudgedPets', getJudgedPets),  # superuser required
+    path('administrator/getUnjudgedPets',
+         getUnjudgedPets),  # superuser required
     path('administrator/isAdmin', isAdmin),
-    
+
     # Pet
     path('pet/getAllPets/', getAllPets),
     path('pet/getPet/', getPet),
-    path('pet/getMyPets/', getMyPets),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
