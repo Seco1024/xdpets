@@ -55,5 +55,6 @@ urlpatterns = [
     # Pet
     path('pet/getAllPets/', getAllPets),
     path('pet/getPet/', getPet),
+    path('pet/getAllMyPet/getAllMyPet/')
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
