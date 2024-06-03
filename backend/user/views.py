@@ -90,6 +90,10 @@ def get_information(request):
             pets = Pet.objects.filter(owner=user)
             pet_info_list = []
             for pet in pets:
+
+                pet_images = PetImage.objects.filter(pet=pet)
+                images_urls = [image.image.url for image in pet_images]
+
                 pet_info = {
                     'pet_id': pet.pet_id,
                     'pet_name': pet.pet_name,
@@ -104,6 +108,7 @@ def get_information(request):
                     'post_date': pet.post_date,
                     'info': pet.info,
                     'legal': pet.legal,
+                    'images_urls': images_urls,
                 }
                 pet_info_list.append(pet_info)
 
