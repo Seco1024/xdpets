@@ -5,7 +5,9 @@ from django.core import serializers
 import json
 from .models import Preference
 from user.models import Profile
+from user.decorators import login_required
 
+@login_required
 @csrf_exempt 
 @require_http_methods(["POST"]) 
 def addPreference(request):
@@ -37,7 +39,7 @@ def addPreference(request):
     except Exception as e:
         return JsonResponse({"message": str(e), "preferenceId": None}, status=500)
     
-
+@login_required
 @csrf_exempt
 @require_http_methods(["GET"])
 def getPreference(request):
@@ -65,7 +67,7 @@ def getPreference(request):
     except Exception as e:
         return JsonResponse({"message": str(e)}, status=500)
 
-
+@login_required
 @csrf_exempt
 @require_http_methods(["POST"])
 def updatePreference(request):
@@ -96,7 +98,7 @@ def updatePreference(request):
     except Exception as e:
         return JsonResponse({"message": str(e)}, status=500)
 
-
+@login_required
 @csrf_exempt
 @require_http_methods(["POST"])
 def deletePreference(request):

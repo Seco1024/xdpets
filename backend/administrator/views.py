@@ -7,7 +7,7 @@ import json
 from administrator.models import Administrator
 from pet.models import Pet
 from user.models import Profile
-
+from .decorators import admin_required
 
 @csrf_exempt
 @require_http_methods(["POST"])
@@ -34,7 +34,6 @@ def addAdministrator(request):
         return JsonResponse({"message": "Invalid JSON.", "adminId": None}, status=400)
     except Exception as e:
         return JsonResponse({"message": str(e), "adminId": None}, status=500)
-
 
 @csrf_exempt
 @require_http_methods(["POST"])
@@ -78,7 +77,7 @@ def deleteAdministrator(request):
     except Exception as e:
         return JsonResponse({"message": str(e)}, status=500)
 
-
+@admin_required()
 @csrf_exempt
 @require_http_methods(["POST"])
 def deletePet(request):
@@ -95,7 +94,7 @@ def deletePet(request):
     except Exception as e:
         return JsonResponse({"message": str(e)}, status=500)
 
-
+@admin_required()
 @csrf_exempt
 @require_http_methods(["PUT"])
 def judgePet(request):
@@ -113,7 +112,7 @@ def judgePet(request):
     except Exception as e:
         return JsonResponse({"message": str(e)}, status=500)
 
-
+@admin_required()
 @csrf_exempt
 @require_http_methods(["GET"])
 def getJudgedPets(request):
@@ -129,7 +128,7 @@ def getJudgedPets(request):
     except Exception as e:
         return JsonResponse({"message": str(e)}, status=500)
 
-
+@admin_required()
 @csrf_exempt
 @require_http_methods(["GET"])
 def getUnjudgedPets(request):
@@ -145,21 +144,7 @@ def getUnjudgedPets(request):
     except Exception as e:
         return JsonResponse({"message": str(e)}, status=500)
 
-
-@csrf_exempt
-@require_http_methods(["GET"])
-def isAdmin(request):
-    try:
-        userId = request.GET.get("userId")
-        if Administrator.objects.filter(user_id=userId).exists():
-            return JsonResponse({"isAdmin": True}, status=200)
-        else:
-            return JsonResponse({"isAdmin": False}, status=200)
-
-    except Exception as e:
-        return JsonResponse({"message": str(e)}, status=500)
-
-
+@admin_required()
 @csrf_exempt
 @require_http_methods(["GET"])
 def getUnjudgedPetsList(request):
@@ -170,6 +155,21 @@ def getUnjudgedPetsList(request):
             pet_list_json.append({"petId": str(
                 pet.pet_id), "petName": pet.pet_name, "isLegal": pet.legal, "userId": str(pet.owner.uid)})
         return JsonResponse({"petList": pet_list_json}, status=200)
+
+    except Exception as e:
+        return JsonResponse({"message": str(e)}, status=500)
+    
+
+@admin_required()
+@csrf_exempt
+@require_http_methods(["GET"])
+def getAllUsers(request):
+    try:
+        user_list = Profile.objects.all()
+        user_list_json = []
+        for user in user_list:
+            user_list_json.append({"userId": str(user.uid), "userName": user.username, "email": user.email, "phone": user.phone})
+        return JsonResponse({"userList": user_list_json}, status=200)
 
     except Exception as e:
         return JsonResponse({"message": str(e)}, status=500)

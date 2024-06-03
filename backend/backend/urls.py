@@ -50,7 +50,7 @@ urlpatterns = [
     path('administrator/getJudgedPets', getJudgedPets),  # superuser required
     path('administrator/getUnjudgedPets',
          getUnjudgedPets),  # superuser required
-    path('administrator/isAdmin', isAdmin),
+    path('administrator/getAllUsers', getAllUsers),  
 
     # Pet
     path('pet/getAllPets/', getAllPets),

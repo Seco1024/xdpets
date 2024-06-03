@@ -7,6 +7,7 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+from user.decorators import login_required
 
 from .models import Profile
 from pet.models import Pet, PetImage
@@ -72,7 +73,7 @@ def login_view(request):
     else:
         return HttpResponseNotAllowed(['POST'])
     
-
+@login_required
 @require_http_methods(["GET"])
 def get_information(request):
     if request.method == 'GET':
@@ -125,6 +126,7 @@ def get_information(request):
         # return HttpResponseNotAllowed(['POST'])
         return JsonResponse({'status': 400, 'success': False, 'message': '只接受GET請求'}, status=400)
 
+@login_required
 @csrf_exempt
 def add_new_pet(request):
     if request.method == 'POST':
@@ -193,7 +195,7 @@ def add_new_pet(request):
         # return HttpResponseNotAllowed(['POST'])
         return JsonResponse({'status': 400, 'success': False, 'message': '只接受POST請求'}, status=400)
 
-
+@login_required
 @csrf_exempt
 def delete_pet(request):
     if request.method == 'POST':
@@ -214,6 +216,7 @@ def delete_pet(request):
 
     return JsonResponse({'status': 400, 'success': False, 'message': '只接受POST請求'}, status=400)
 
+@login_required
 @csrf_exempt
 def update_pet(request):
     if request.method == 'POST':
