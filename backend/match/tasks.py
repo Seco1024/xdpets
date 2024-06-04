@@ -21,24 +21,8 @@ def check_preferences_and_send_emails():
                 continue
             if getattr(preference, keys):
                 query &= Q(**{keys: getattr(preference, keys)})
-        # if preference.breed:
-        #     query &= Q(breed=preference.breed)
-        # if preference.category:
-        #     query &= Q(category=preference.category)
-        # if preference.gender:
-        #     query &= Q(gender=preference.gender)
-        # if preference.size:
-        #     query &= Q(size=preference.size)
-        # if preference.region:
-        #     query &= Q(region=preference.region)
-        # if preference.age:
-        #     query &= Q(age=preference.age)
-        # if preference.coat_color:
-        #     query &= Q(coat_color=preference.coat_color)
-        # if preference.ligated is not None:
-        #     query &= Q(ligated=preference.ligated)
 
-        # query &= Q(legal=True)
+        query &= Q(legal=True)
         matching_pets = pets.filter(query)
         
         for pet in matching_pets:
