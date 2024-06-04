@@ -152,7 +152,7 @@ TIME_ZONE = 'Asia/Taipei'  # 台北時區
 
 USE_I18N = True  # 啟用國際化
 
-USE_TZ = False  # 不啟用時區支持
+USE_TZ = True  # 不啟用時區支持
 
 
 # Static files (CSS, JavaScript, Images)
