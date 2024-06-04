@@ -14,6 +14,7 @@ class Preference(models.Model):
     age = models.IntegerField(blank=True, null=True)
     coat_color = models.CharField(max_length=10, blank=True, null=True)
     ligated = models.BooleanField(blank=True, null=True) 
+    matched = models.BooleanField(default=False)
 
     def __str__(self):
         return self.category

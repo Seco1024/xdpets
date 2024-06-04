@@ -16,29 +16,37 @@ def check_preferences_and_send_emails():
 
     for preference in preferences:
         query = Q()
-        if preference.breed:
-            query &= Q(breed=preference.breed)
-        if preference.category:
-            query &= Q(category=preference.category)
-        if preference.gender:
-            query &= Q(gender=preference.gender)
-        if preference.size:
-            query &= Q(size=preference.size)
-        if preference.region:
-            query &= Q(region=preference.region)
-        if preference.age:
-            query &= Q(age=preference.age)
-        if preference.coat_color:
-            query &= Q(coat_color=preference.coat_color)
-        if preference.ligated is not None:
-            query &= Q(ligated=preference.ligated)
-        
+        for keys in preference.__dict__.keys():
+            if keys in ['_state', 'uid', 'preferenceId', 'matched']:
+                continue
+            if getattr(preference, keys):
+                query &= Q(**{keys: getattr(preference, keys)})
+        # if preference.breed:
+        #     query &= Q(breed=preference.breed)
+        # if preference.category:
+        #     query &= Q(category=preference.category)
+        # if preference.gender:
+        #     query &= Q(gender=preference.gender)
+        # if preference.size:
+        #     query &= Q(size=preference.size)
+        # if preference.region:
+        #     query &= Q(region=preference.region)
+        # if preference.age:
+        #     query &= Q(age=preference.age)
+        # if preference.coat_color:
+        #     query &= Q(coat_color=preference.coat_color)
+        # if preference.ligated is not None:
+        #     query &= Q(ligated=preference.ligated)
+
+        # query &= Q(legal=True)
         matching_pets = pets.filter(query)
         
         for pet in matching_pets:
             cache_key = f"matched_{preference.preferenceId}_{pet.pet_id}"
-            if not cache.get(cache_key):
+            if not cache.get(cache_key) or not preference.matched:
                 cache.set(cache_key, True, timeout=None)
+                preference.matched = True
+                preference.save()
             else:
                 matching_pets = matching_pets.exclude(pet_id=pet.pet_id)
 

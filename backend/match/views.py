@@ -57,7 +57,8 @@ def getPreference(request):
                 "region": preference.region,
                 "age": preference.age,
                 "coat_color": preference.coat_color,
-                "ligated": preference.ligated
+                "ligated": preference.ligated,
+                "matched": preference.matched
             })
             
         return JsonResponse({"message": f"Preference get successfully.", "preferenceInfo": preference_json}, status=200)
