@@ -27,7 +27,7 @@ test_backend:
   image: docker
   script:
     - cd ./backend
-    - docker compose up --build
+    - sudo docker compose up --build
   only:
     - Test
   when: always
