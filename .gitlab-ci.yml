@@ -13,6 +13,7 @@ test:
   stage: test_frontend
   image: node:current-alpine3.16
   script:
+    - cd ./xdpets
     - npm install
     - npm test -- --watchAll=false
   only:
