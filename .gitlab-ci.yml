@@ -30,6 +30,7 @@ test_backend:
     - docker compose up --build -d
     - sleep 30
     - docker exec -i backend-backend-1 bash -c "source /app/.env && /usr/local/bin/python /app/manage.py test"
+  after_script:
     - docker compose down
   only:
     - Test
