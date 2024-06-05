@@ -26,6 +26,7 @@ test_backend:
   stage: test_backend
   image: docker
   script:
+    - cd ./backend
     - docker compose up --build
   only:
     - Test
