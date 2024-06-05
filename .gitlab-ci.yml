@@ -6,8 +6,28 @@
 # Note that environment variables can be set in several places
 # See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
 stages:
-- test
-sast:
-  stage: test
-include:
-- template: Security/SAST.gitlab-ci.yml
+  - test_frontend
+  - test_backend
+
+test:
+  stage: test_frontend
+  image: node:current-alpine3.16
+  script:
+    - npm install
+    - npm test -- --watchAll=false
+  only:
+    - Test
+  tags:
+    - nccutrial_frontend
+
+test:
+  stage: test_backend
+  script:
+    - sudo docker compose up --build
+    - sudo docker exec -it backend-backend-1 "/usr/local/bin/python manage.py test"
+    - sudo docker compose down
+  only:
+    - Test
+  tags:
+    - nccutrial_backend
+
