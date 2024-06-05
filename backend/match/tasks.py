@@ -17,7 +17,7 @@ def check_preferences_and_send_emails():
     for preference in preferences:
         query = Q()
         for keys in preference.__dict__.keys():
-            if keys in ['_state', 'uid', 'preferenceId', 'matched']:
+            if keys in ['_state', 'uid', 'preferenceId', 'matched', 'uid_id']:
                 continue
             if getattr(preference, keys):
                 query &= Q(**{keys: getattr(preference, keys)})
