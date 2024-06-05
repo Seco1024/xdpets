@@ -26,10 +26,12 @@ test_backend:
   stage: test_backend
   script:
     - cd ./backend
-    - cp /home/yanghaocheng/.env .
+    - cp /home/gitlab-runner/.env .
     - docker compose up --build -d
     - sleep 30
-    - docker exec -it backend-backend-1 "/usr/local/bin/python manage.py test"
+    - docker exec -i backend-backend-1 bash -c "source /app/.env && /usr/local/bin/python /app/manage.py test"
+  after_script:
+    - cd ./backend
     - docker compose down
   only:
     - Test
