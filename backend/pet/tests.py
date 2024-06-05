@@ -34,7 +34,7 @@ class PetModelTests(TestCase):
             owner=self.user,
             legal=True
         )
-        self.assertEqual(pet.pet_name, 'Buddy')
+        self.assertEqual(pet.pet_name, '蛋皮')
         self.assertTrue(pet.legal)
 
     def test_create_pet_image(self):
@@ -76,7 +76,7 @@ class PetViewTests(TestCase):
             date=timezone.now()
         )
         self.pet = Pet.objects.create(
-            pet_id='033333666fa8e61684ef42cd45dbcb98',
+            pet_id=uuid.uuid4(),
             pet_name='蛋皮',
             breed='柴犬',
             category='狗',
@@ -103,13 +103,14 @@ class PetViewTests(TestCase):
         self.assertEqual(len(response.json()['allPetInformation']), 1)
 
     def test_getPet(self):
-        response = self.client.get(reverse('getPet'), {'pet_id': '1'})
+        response = self.client.get(reverse('getPet'), {'pet_id': self.pet.pet_id})
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json()['success'])
-        self.assertEqual(response.json()['PetInformation']['pet_id'], '1')
+        self.assertEqual(response.json()['PetInformation']['pet_id'].replace("-", ""), self.pet.pet_id.hex)
 
     def test_getPet_not_found(self):
-        response = self.client.get(reverse('getPet'), {'pet_id': '999'})
+        non_existent_uuid = uuid.uuid4()  
+        response = self.client.get(reverse('getPet'), {'pet_id': str(non_existent_uuid)})
         self.assertEqual(response.status_code, 404)
         self.assertFalse(response.json()['success'])
         self.assertEqual(response.json()['message'], 'Pet not found')
@@ -121,23 +122,24 @@ class PetViewTests(TestCase):
         self.assertEqual(len(response.json()['PetInformation']), 1)
 
     def test_getMyPets_not_found(self):
-        response = self.client.get(reverse('getMyPets'), {'user_id': '999'})
+        non_existent_uuid = uuid.uuid4()  # 生成一個不存在的有效 UUID
+        response = self.client.get(reverse('getMyPets'), {'user_id': str(non_existent_uuid)})
         self.assertEqual(response.status_code, 404)
         self.assertFalse(response.json()['success'])
         self.assertEqual(response.json()['message'], 'No pets found for this user')
 
     def test_login(self):
         response = self.client.post(reverse('login'), {
-            'email': 'testuser@example.com',
+            'username': 'testuser',
             'password': '12345'
         })
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json()['success'])
-        self.assertEqual(response.json()['user']['username'], 'testuser')
+        self.assertEqual(response.json()['uid'].replace('-', ''), self.user.uid.hex)
 
     def test_login_failed(self):
         response = self.client.post(reverse('login'), {
-            'email': 'testuser@example.com',
+            'username': 'testuser',
             'password': 'wrong_password'
         })
         self.assertEqual(response.status_code, 401)

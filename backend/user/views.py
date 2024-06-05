@@ -65,11 +65,11 @@ def login_view(request):
             user = users.first()
             if user.authenticate(password):
                 request.session['uid'] = str(user.uid)
-                return JsonResponse({'status': 200, 'message': '登入成功', 'uid': user.uid}, status=200)
+                return JsonResponse({'status': 200, 'message': '登入成功', 'success': True, 'uid': user.uid}, status=200)
             else:
-                return JsonResponse({'status': 400, 'message': '密碼錯誤'}, status=400)
+                return JsonResponse({'status': 401,  'success': False, 'message': 'Invalid credentials'}, status=401)
         else:
-            return JsonResponse({'status': 400, 'message': '用戶不存在'}, status=400)
+            return JsonResponse({'status': 400,  'success': False, 'message': '用戶不存在'}, status=400)
     else:
         return HttpResponseNotAllowed(['POST'])
     

@@ -34,7 +34,7 @@ def getPet(request):
         pet_id = request.GET.get('pet_id', None)
         
         if not pet_id:
-            return JsonResponse({'status': 400, 'success': False, 'message': 'Missing pet_id parameter'})
+            return JsonResponse({'status': 400, 'success': False, 'message': 'Missing pet_id parameter'}, status=400)
 
         try:
             pet = Pet.objects.get(pet_id=pet_id)
@@ -57,11 +57,11 @@ def getPet(request):
                 'owner_id': pet.owner.uid,
                 'images_urls': images_urls,
             }
-            return JsonResponse({'status': 200, 'success': True, 'PetInformation': pet_info})
+            return JsonResponse({'status': 200, 'success': True, 'PetInformation': pet_info}, status=200)
         except Pet.DoesNotExist:
-            return JsonResponse({'status': 404, 'success': False, 'message': 'Pet not found'})
+            return JsonResponse({'status': 404, 'success': False, 'message': 'Pet not found'},  status=404)
     else:
-        return JsonResponse({'status': 405, 'success': False, 'message': 'Method not allowed'})
+        return JsonResponse({'status': 405, 'success': False, 'message': 'Method not allowed'}, status=405)
     
 
 def getMyPets(request):
@@ -69,12 +69,12 @@ def getMyPets(request):
         user_id = request.GET.get('user_id', None)
         
         if not user_id:
-            return JsonResponse({'status': 400, 'success': False, 'message': 'Missing user_id parameter'})
+            return JsonResponse({'status': 400, 'success': False, 'message': 'Missing user_id parameter'}, status=400)
 
         try:
             pets = Pet.objects.filter(owner_id=user_id, legal=True)
             if not pets.exists():
-                return JsonResponse({'status': 404, 'success': False, 'message': 'No pets found for this user'})
+                return JsonResponse({'status': 404, 'success': False, 'message': 'No pets found for this user'}, status=404)
 
             pet_info = []
             for pet in pets:
@@ -98,10 +98,8 @@ def getMyPets(request):
                     'image_urls': image_urls,
                 })
 
-            return JsonResponse({'status': 200, 'success': True, 'PetInformation': pet_info})
+            return JsonResponse({'status': 200, 'success': True, 'PetInformation': pet_info}, status=200)
         except Pet.DoesNotExist:
-            return JsonResponse({'status': 404, 'success': False, 'message': 'Pet not found'})
+            return JsonResponse({'status': 404, 'success': False, 'message': 'Pet not found'}, status=404)
     else:
-        return JsonResponse({'status': 405, 'success': False, 'message': 'Method not allowed'})
-
-
+        return JsonResponse({'status': 405, 'success': False, 'message': 'Method not allowed'}, status=405)
