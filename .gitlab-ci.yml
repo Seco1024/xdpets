@@ -18,6 +18,7 @@ test_frontend:
     - npm test -- --watchAll=false
   only:
     - Test
+  when: always
   tags:
     - nccutrial_frontend
 
@@ -28,5 +29,6 @@ test_backend:
     - docker compose up --build
   only:
     - Test
+  when: always
   tags:
     - nccutrial_backend
