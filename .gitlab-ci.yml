@@ -9,7 +9,7 @@ stages:
   - test_frontend
   - test_backend
 
-test:
+test_frontend:
   stage: test_frontend
   image: node:current-alpine3.16
   script:
@@ -21,4 +21,12 @@ test:
   tags:
     - nccutrial_frontend
 
-
+test_backend:
+  stage: test_backend
+  image: docker
+  script:
+    - docker compose up --build
+  only:
+    - Test
+  tags:
+    - nccutrial_backend
