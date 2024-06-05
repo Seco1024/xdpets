@@ -26,7 +26,7 @@ test_backend:
   stage: test_backend
   script:
     - cd ./backend
-    - sudo docker compose up --build
+    - docker compose up --build
   only:
     - Test
   when: always
