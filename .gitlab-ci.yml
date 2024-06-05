@@ -29,7 +29,7 @@ test_backend:
     - cp /home/gitlab-runner/.env .
     - docker compose up --build -d
     - sleep 30
-    - docker exec -i backend-backend-1 "/usr/local/bin/python manage.py test"
+    - docker exec -i backend-backend-1 "/usr/local/bin/python /app/manage.py test"
     - docker compose down
   only:
     - Test
