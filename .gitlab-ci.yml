@@ -26,7 +26,11 @@ test_backend:
   stage: test_backend
   script:
     - cd ./backend
-    - docker compose up --build
+    - cp /home/yanghaocheng/.env .
+    - docker compose up --build -d
+    - sleep 30
+    - docker exec -it backend-backend-1 "/usr/local/bin/python manage.py test"
+    - docker compose down
   only:
     - Test
   when: always
