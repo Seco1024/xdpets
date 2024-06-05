@@ -24,7 +24,6 @@ test_frontend:
 
 test_backend:
   stage: test_backend
-  image: docker
   script:
     - cd ./backend
     - sudo docker compose up --build
