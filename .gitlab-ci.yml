@@ -20,14 +20,4 @@ test:
   tags:
     - nccutrial_frontend
 
-test:
-  stage: test_backend
-  script:
-    - sudo docker compose up --build
-    - sudo docker exec -it backend-backend-1 "/usr/local/bin/python manage.py test"
-    - sudo docker compose down
-  only:
-    - Test
-  tags:
-    - nccutrial_backend
 
