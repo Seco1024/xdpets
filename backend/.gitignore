@@ -3,3 +3,5 @@ backend/.env
 .env
 mysql_backup.sh
 database_backup.sql
+*.pyc
+__pycache__/
