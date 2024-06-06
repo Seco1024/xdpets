@@ -107,7 +107,7 @@ const SendAdoptionBox = ({ isCheckboxChecked }) => {
   const handleConfirmAction = async () => {
     const formData = new FormData();
     const region = `${city} ${area}`;
-    // setLigation(ligation === "Yes" ? true : false);
+
     // Add form data
     formData.append("ownerId", uid);
     formData.append("name", petname);
@@ -118,7 +118,13 @@ const SendAdoptionBox = ({ isCheckboxChecked }) => {
     formData.append("region", region);
     formData.append("age", age);
     formData.append("coat_color", haircolor);
-    formData.append("ligated", "True");
+
+    if (ligation === "是") {
+      formData.append("ligated", "True");
+    } else {
+      formData.append("ligated", "False");
+    }
+
     formData.append("info", discription);
     formData.append("post_date", new Date().toISOString());
 
@@ -132,11 +138,7 @@ const SendAdoptionBox = ({ isCheckboxChecked }) => {
       const response = await axios.post(
         "http://localhost:8000/user/addNewPet/",
         formData,
-        {
-          // headers: {
-          //   "Content-Type": "multipart/form-data",
-          // },
-        }
+        { withCredentials: true }
       );
 
       if (response.status === 200 && response.data.success) {
@@ -147,6 +149,8 @@ const SendAdoptionBox = ({ isCheckboxChecked }) => {
       }
     } catch (error) {
       console.error("Request failed:", error);
+      setSnackbarOpen(true);
+      setSnackbarMessage("請檢查您的資料，或稍後在試試看");
     }
   };
 
@@ -458,106 +462,6 @@ const SendAdoptionBox = ({ isCheckboxChecked }) => {
           <Grid item xs={12} sm={12}>
             <Box component="section" sx={{ p: 0, mt: 2, ml: 2, mr: 2 }}></Box>
           </Grid>
-          {/* <Grid item xs={12} sm={6}>
-            <TextField
-              required
-              id="name"
-              label="Your Name"
-              value={name}
-              onChange={handleNameChange}
-              fullWidth
-              InputProps={{
-                style: {
-                  fontSize: 15,
-                  height: 54,
-                  padding: "10px 10px 3px 10px",
-                },
-              }}
-              variant="filled"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              required
-              id="phonenumber"
-              label="Phone Number"
-              value={phonenumber}
-              onChange={handlePhonenumberChange}
-              fullWidth
-              InputProps={{
-                style: {
-                  fontSize: 15,
-                  height: 54,
-                  padding: "10px 10px 3px 10px",
-                },
-              }}
-              variant="filled"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <FormControl fullWidth variant="filled" option>
-              <InputLabel id="love-adoption-book-label">
-                Love Adoption Book
-              </InputLabel>
-              <Select
-                labelId="love-adoption-book-label"
-                id="love_adoption_book"
-                value={love_adoption_book}
-                onChange={handleLoveAdoptionBookChange}
-                label="Love Adoption Book"
-              >
-                <MenuItem value="yes">Needed</MenuItem>
-                <MenuItem value="no">No need</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <FormControl fullWidth variant="filled" option>
-              <InputLabel id="accept-followup-label">
-                Accept Follow-up
-              </InputLabel>
-              <Select
-                labelId="accept-followup-label"
-                id="accept_followup"
-                value={accept_followup}
-                onChange={handleAcceptFollowupChange}
-                label="Accept Followup"
-              >
-                <MenuItem value="yes">Yes</MenuItem>
-                <MenuItem value="no">No</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <FormControl fullWidth variant="filled" option>
-              <InputLabel id="adult-or-not-label">Adult or Not</InputLabel>
-              <Select
-                labelId="adult-or-not-label"
-                id="adult-or-not"
-                value={adult_or_not}
-                onChange={handleAdultOrNotChange}
-                label="Adult or not"
-              >
-                <MenuItem value="yes">Yes</MenuItem>
-                <MenuItem value="no">No</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <FormControl fullWidth variant="filled" option>
-              <InputLabel id="family-agrees-label">Family Agrees</InputLabel>
-              <Select
-                labelId="family-agrees-label"
-                id="accept_followup"
-                value={family_agrees}
-                onChange={handleFamilyAgreesChange}
-                label="Family Agrees"
-              >
-                <MenuItem value="yes">Yes</MenuItem>
-                <MenuItem value="no">No</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid> */}
           <Grid item xs={12} sm={12}>
             <Box component="section" sx={{ p: 0, mt: 2, ml: 2 }}>
               資訊送出後需經過審核，因此不會立即出現在列表中，請耐心等待審核勿重覆刊登
@@ -592,6 +496,7 @@ const SendAdoptionBox = ({ isCheckboxChecked }) => {
           autoHideDuration={6000}
           onClose={handleSnackbarClose}
           message={snackbarMessage}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         />
       </Box>
 

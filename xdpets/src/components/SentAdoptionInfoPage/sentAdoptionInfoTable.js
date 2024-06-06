@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // Add this line to import axios
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
-import Button from '@mui/material/Button';
-import TablePagination from '@mui/material/TablePagination';
+import React, { useState, useEffect } from "react";
+import axios from "axios"; // Add this line to import axios
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
+import TablePagination from "@mui/material/TablePagination";
 import Snackbar from "@mui/material/Snackbar";
 import { Alert } from "@mui/material";
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import DeleteDialog from "../MatchPage/DeleteDialog";
 import { useUid } from "../UidContext"; // Adjust the path if necessary
 import { useNavigate } from "react-router-dom";
@@ -31,7 +31,10 @@ function PetTable({ items, onEdit, onDelete }) {
     setPage(0);
   };
 
-  const paginatedItems = items.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const paginatedItems = items.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
 
   return (
     <>
@@ -51,10 +54,16 @@ function PetTable({ items, onEdit, onDelete }) {
             {paginatedItems.map((pet) => (
               <TableRow key={pet.pet_id}>
                 <TableCell>
-                  <IconButton aria-label="edit" onClick={() => onEdit(pet.pet_id)}>
+                  <IconButton
+                    aria-label="edit"
+                    onClick={() => onEdit(pet.pet_id)}
+                  >
                     <EditIcon />
                   </IconButton>
-                  <IconButton aria-label="delete" onClick={() => onDelete(pet.pet_id)}>
+                  <IconButton
+                    aria-label="delete"
+                    onClick={() => onDelete(pet.pet_id)}
+                  >
                     <DeleteIcon />
                   </IconButton>
                 </TableCell>
@@ -95,16 +104,24 @@ function SentAdoptionInfoTable() {
     // Fetch the default values from an API
     async function fetchDefaultValues() {
       try {
-        const response = await axios.get(`http://localhost:8000/pet/getMyPets/?user_id=${uid}`);
+        const response = await axios.get(
+          `http://localhost:8000/pet/getMyPets/?user_id=${uid}`,
+          {
+            withCredentials: true,
+          }
+        );
         setPets(response.data["PetInformation"]);
-        console.log('Successfully fetched pet data:', response.data["PetInformation"]);
+        console.log(
+          "Successfully fetched pet data:",
+          response.data["PetInformation"]
+        );
       } catch (error) {
         console.error("Error fetching default values", error);
       }
-    };
+    }
 
     fetchDefaultValues();
-  }, []);
+  }, [uid]);
 
   const handleDeleteDialogOpen = (pet_id) => {
     setDeleteId(pet_id);
@@ -118,13 +135,10 @@ function SentAdoptionInfoTable() {
 
   const handleDeleteConfirm = async () => {
     try {
-      let request = await axios.post(
-        "http://localhost:8000/user/deletePet/",
-        {
-          ownerId: uid,
-          pet_id: deleteId,
-        }
-      );
+      let request = await axios.post("http://localhost:8000/user/deletePet/", {
+        ownerId: uid,
+        pet_id: deleteId,
+      });
 
       if (request.status === 200) {
         setDeleteSnackbarMessage("刪除成功");
@@ -165,14 +179,19 @@ function SentAdoptionInfoTable() {
   };
 
   const handleAddAdoption = () => {
-    console.log('Add Adoption button clicked');
+    console.log("Add Adoption button clicked");
     // Implement your add adoption functionality here
     navigate("/sendadoption");
   };
 
   return (
     <div>
-      <Button variant="contained" color="primary" onClick={handleAddAdoption} sx={{ mb: 2 }}>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleAddAdoption}
+        sx={{ mb: 2 }}
+      >
         新增送養
       </Button>
       <PetTable items={pets} onEdit={handleEdit} onDelete={handleDelete} />
