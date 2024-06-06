@@ -32,8 +32,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-CELERY_BROKER_URL = 'redis://localhost:6379/0'  
-CELERY_RESULT_BACKEND = 'django-db'  
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'django-db'
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 MEDIA_URL = '/media/'
@@ -63,7 +63,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware', #stop csrf to make sending post request easier
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -90,13 +90,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-EMAIL_HOST = 'smtp.gmail.com'  
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_PORT = 587 
+EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False  
-EMAIL_HOST_USER = os.getenv('EMAIL_USER')  
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')  
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = os.getenv('EMAIL_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -122,8 +122,15 @@ CACHES = {
     }
 }
 
-CORS_ALLOW_ALL_ORIGINS = True
-
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
+CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_SECURE = None
+# CSRF settings
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+]
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
