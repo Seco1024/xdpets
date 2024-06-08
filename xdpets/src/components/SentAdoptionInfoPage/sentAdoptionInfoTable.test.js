@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import '@testing-library/jest-dom/extend-expect';
 import axios from "axios";
-import SentAdoptionInfoTable from "./SentAdoptionInfoTable";
+import SentAdoptionInfoTable from "./sentAdoptionInfoTable";
 import { BrowserRouter as Router } from "react-router-dom";
 import { UidProvider } from "../UidContext";
 

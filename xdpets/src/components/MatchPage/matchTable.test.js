@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import '@testing-library/jest-dom/extend-expect';
 import axios from "axios";
-import MatchTable from "./MatchTable";
+import MatchTable from "./matchTable";
 
 jest.mock("axios");
 

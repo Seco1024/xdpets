@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import UserInfoTable from "./UserInfoTable";
+import UserInfoTable from "./userInfoTable";
 
 // Mocking the ConfirmationDialog and DetailsDialog components
 jest.mock("../ConfirmationDialog", () => () => <div>ConfirmationDialog Component</div>);

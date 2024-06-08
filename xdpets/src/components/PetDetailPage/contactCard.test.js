@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import axios from 'axios';
-import ContactCard from './ContactCard';
+import ContactCard from './contactCard';
 import { UidContext } from '../UidContext';
 
 jest.mock('axios');
