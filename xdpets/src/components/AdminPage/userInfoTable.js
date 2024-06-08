@@ -14,8 +14,8 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import ConfirmationDialog from "../ConfirmationDialog";
 import { useEffect } from "react";
 import { Snackbar, Alert } from "@mui/material";
-import DetailsDialog from "./DetailDialog";
 import axios from "axios";
+import PeopleDetail from "./peopleDetail";
 function UserInfo({ items, onDelete, onShow }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
@@ -41,15 +41,16 @@ function UserInfo({ items, onDelete, onShow }) {
           <TableHead>
             <TableRow>
               <TableCell>Actions</TableCell>
-              <TableCell>Status</TableCell>
+
               <TableCell>User ID</TableCell>
+              <TableCell>User Name</TableCell>
 
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {paginatedItems.map((item) => (
-              <TableRow key={item.id}>
+              <TableRow key={item.userId}>
                 <TableCell>
                   <IconButton
                     aria-label="delete"
@@ -60,9 +61,9 @@ function UserInfo({ items, onDelete, onShow }) {
                     <Typography variant="body2">Delete</Typography>
                   </IconButton>
                 </TableCell>
-                <TableCell>{item.status}</TableCell>
-                <TableCell>{item.userID}</TableCell>
-                <TableCell>{item.petNumber}</TableCell>
+
+                <TableCell>{item.userId}</TableCell>
+                <TableCell>{item.userName}</TableCell>
                 <TableCell>
                   <IconButton
                     aria-label="show"
@@ -96,7 +97,7 @@ function UserInfoTable() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const [deleteId, setDeleteId] = useState(null);
-  const [petDetails, setPetDetails] = useState({});
+  const [peopleDetails, setPeopleDetails] = useState({});
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [alertSeverity, setAlertSeverity] = useState("success");
@@ -104,13 +105,25 @@ function UserInfoTable() {
   useEffect(() => {
     // fetch data from API
     const fetchData = async () => {
-      const result = Array.from({ length: 5 }, (_, index) => ({
-        id: index + 1,
-        status: "正常",
-        userID: `0844d0789054469b9daf9f1d4b1d4cd5`,
-        petName: `Pet ${index + 1}`,
-      }));
-      setData(result);
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/administrator/getAllUsers",
+          {
+            withCredentials: true,
+          }
+        );
+
+        if (response.status === 200) {
+          console.log(response.data["userList"]);
+
+          setData(response.data["userList"]);
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setSnackbarMessage("無法獲取用戶資訊");
+        setAlertSeverity("error");
+        setSnackbarOpen(true);
+      }
     };
 
     fetchData();
@@ -121,31 +134,48 @@ function UserInfoTable() {
     setDeleteId(null);
   };
 
-  const handleConfirmAction = () => {
-    setData((prevData) => prevData.filter((item) => item.id !== deleteId));
+  const handleConfirmAction = async () => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/administrator/deletePet`,
+        {
+          petId: deleteId,
+          withCredentials: true,
+        }
+      );
+
+      if (response.status === 200) {
+        setData((prevData) => prevData.filter((item) => item.id !== deleteId));
+        setSnackbarMessage(`刪除成功`);
+        setAlertSeverity("success");
+      }
+    } catch (error) {
+      setSnackbarMessage(`刪除失敗`);
+      setAlertSeverity("error");
+    }
     setDialogOpen(false);
-
-    // Set snackbar message and open it
-    setSnackbarMessage("刪除成功");
-    setAlertSeverity("success");
     setSnackbarOpen(true);
-
     // Implement your delete functionality here
   };
 
   const handleDelete = (id) => {
-    setDialogMessage(`你確定要刪除 item with id: ${id} 嗎？`);
+    const item = data.find((item) => item.id === id);
+    setDialogMessage(`你確定要刪除 ${item.userName} 嗎？`);
     setDeleteId(id);
     setDialogOpen(true);
   };
 
   const handleShow = async (id) => {
+    const item = data.find((item) => item.id === id);
     try {
       const response = await axios.get(
-        "http://localhost:8000/user/getInformation/?uid=0844d0789054469b9daf9f1d4b1d4cd5"
+        `http://localhost:8000/user/getInformation/?uid=${item.userId}`,
+        {
+          withCredentials: true,
+        }
       );
       if (response.status === 200) {
-        setPetDetails(response.data["data"]);
+        setPeopleDetails(response.data["data"]);
         setDetailsOpen(true);
       }
     } catch (error) {
@@ -171,10 +201,10 @@ function UserInfoTable() {
         onConfirm={handleConfirmAction}
         message={dialogMessage}
       />
-      <DetailsDialog
+      <PeopleDetail
         open={detailsOpen}
         onClose={handleDetailsClose}
-        petDetails={petDetails}
+        peopleDetails={peopleDetails}
       />
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}

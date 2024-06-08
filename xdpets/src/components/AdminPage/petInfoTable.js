@@ -109,7 +109,10 @@ function PetInfoTable() {
     const fetchData = async () => {
       try {
         let response = await axios.get(
-          "http://localhost:8000/administrator/getJudgedPets"
+          "http://localhost:8000/administrator/getJudgedPets",
+          {
+            withCredentials: true,
+          }
         );
 
         if (response.status === 200) {
@@ -159,6 +162,7 @@ function PetInfoTable() {
         `http://localhost:8000/administrator/deletePet`,
         {
           petId: deleteId,
+          withCredentials: true,
         }
       );
 
