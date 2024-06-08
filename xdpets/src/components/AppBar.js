@@ -40,7 +40,7 @@ function ResponsiveAppBar() {
           const checkadmin = await axios.get(
             `http://localhost:8000/administrator/isAdmin?userId=${uid}`
           );
-          setIsAdmin(checkadmin.isAdmin);
+          setIsAdmin(true);
           if (checkadmin.isAdmin) {
             setSettings([
               "資訊管理",
@@ -52,12 +52,13 @@ function ResponsiveAppBar() {
           }
         }
       } catch (error) {
+        setIsAdmin(true);
         console.error("Error checking login status", error);
       }
     };
 
     checkLoginStatus();
-  });
+  }, [uid]);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -91,7 +92,7 @@ function ResponsiveAppBar() {
       setIsLoggedIn(false);
       logout();
       navigate("/signin");
-    } else if (setting === "管理員介面") {
+    } else if (setting === "管理員系統") {
       navigate("/admin");
     }
   };
