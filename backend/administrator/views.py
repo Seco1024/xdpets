@@ -85,14 +85,14 @@ def deletePet(request):
         data = json.loads(request.body)
         pet = Pet.objects.get(pet_id=data["petId"])
         pet.delete()
-        return JsonResponse({"message": "Pet deleted successfully."}, status=200)
+        return JsonResponse({"message": "Pet deleted successfully.", "success": True}, status=200)
 
     except Pet.DoesNotExist:
-        return JsonResponse({"message": "Pet not found."}, status=404)
+        return JsonResponse({"message": "Pet not found.", "success": False}, status=404)
     except json.JSONDecodeError:
-        return JsonResponse({"message": "Invalid JSON."}, status=400)
+        return JsonResponse({"message": "Invalid JSON.", "success": False}, status=400)
     except Exception as e:
-        return JsonResponse({"message": str(e)}, status=500)
+        return JsonResponse({"message": str(e), "success": False}, status=500)
 
 @admin_required()
 @csrf_exempt
@@ -103,14 +103,14 @@ def judgePet(request):
         pet = Pet.objects.get(pet_id=data['petId'])
         pet.legal = data['isLegal']
         pet.save()
-        return JsonResponse({"message": "Preference updated successfully."}, status=200)
+        return JsonResponse({"message": "Pet updated successfully.", "success": True}, status=200)
 
     except Pet.DoesNotExist:
-        return JsonResponse({"message": "Pet not found."}, status=404)
+        return JsonResponse({"message": "Pet not found.", "success": False}, status=404)
     except json.JSONDecodeError:
-        return JsonResponse({"message": "Invalid JSON."}, status=400)
+        return JsonResponse({"message": "Invalid JSON.", "success": False}, status=400)
     except Exception as e:
-        return JsonResponse({"message": str(e)}, status=500)
+        return JsonResponse({"message": str(e), "success": False}, status=500)
 
 @admin_required()
 @csrf_exempt
@@ -123,10 +123,10 @@ def getJudgedPets(request):
         for pet in pet_list:
             pet_list_json.append({"petId": str(
                 pet.pet_id), "petName": pet.pet_name, "isLegal": pet.legal, "userId": str(pet.owner.uid)})
-        return JsonResponse({"petList": pet_list_json}, status=200)
+        return JsonResponse({"petList": pet_list_json, "success": True}, status=200)
 
     except Exception as e:
-        return JsonResponse({"message": str(e)}, status=500)
+        return JsonResponse({"message": str(e), "success": False}, status=500)
 
 @admin_required()
 @csrf_exempt
@@ -139,10 +139,10 @@ def getUnjudgedPets(request):
         for pet in pet_list:
             pet_list_json.append(
                 {"petId": str(pet.pet_id), "petName": pet.pet_name, "userId": str(pet.owner.uid)})
-        return JsonResponse({"petList": pet_list_json}, status=200)
+        return JsonResponse({"petList": pet_list_json, "success": True}, status=200)
 
     except Exception as e:
-        return JsonResponse({"message": str(e)}, status=500)
+        return JsonResponse({"message": str(e), "success": False}, status=500)
 
 @admin_required()
 @csrf_exempt
@@ -154,10 +154,10 @@ def getUnjudgedPetsList(request):
         for pet in pet_list:
             pet_list_json.append({"petId": str(
                 pet.pet_id), "petName": pet.pet_name, "isLegal": pet.legal, "userId": str(pet.owner.uid)})
-        return JsonResponse({"petList": pet_list_json}, status=200)
+        return JsonResponse({"petList": pet_list_json, "success": True}, status=200)
 
     except Exception as e:
-        return JsonResponse({"message": str(e)}, status=500)
+        return JsonResponse({"message": str(e), "success": False}, status=500)
     
 
 @admin_required()
@@ -169,7 +169,7 @@ def getAllUsers(request):
         user_list_json = []
         for user in user_list:
             user_list_json.append({"userId": str(user.uid), "userName": user.username, "email": user.email, "phone": user.phone})
-        return JsonResponse({"userList": user_list_json}, status=200)
+        return JsonResponse({"userList": user_list_json, "success": True}, status=200)
 
     except Exception as e:
         return JsonResponse({"message": str(e)}, status=500)
@@ -180,7 +180,7 @@ def checkIsAdmin(request):
     try:
         userId = request.GET.get("userId")
         admin = Administrator.objects.get(admin_uid=userId)
-        return JsonResponse({"isAdmin": True, "success":True }, status=200)
+        return JsonResponse({"isAdmin": True, "success":True}, status=200)
     except Administrator.DoesNotExist:
         return JsonResponse({"isAdmin": False, "success":True}, status=200)
     except Exception as e:
