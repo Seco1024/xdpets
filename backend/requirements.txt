@@ -9,3 +9,4 @@ django-celery-beat
 django-celery-results
 redis
 django-redis
+coverage
