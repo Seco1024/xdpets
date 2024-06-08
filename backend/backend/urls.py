@@ -34,6 +34,7 @@ urlpatterns = [
     path('administrator/getJudgedPets', getJudgedPets, name='getJudgedPets'),  # superuser required
     path('administrator/getUnjudgedPets', getUnjudgedPets, name='getUnjudgedPets'),  # superuser required
     path('administrator/getAllUsers', getAllUsers, name='getAllUsers'),
+    path('administrator/checkIsAdmin', checkIsAdmin, name='checkisAdmin'),
 
     # Pet
     path('pet/getAllPets/', getAllPets, name='getAllPets'),
