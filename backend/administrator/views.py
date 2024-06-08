@@ -173,3 +173,15 @@ def getAllUsers(request):
 
     except Exception as e:
         return JsonResponse({"message": str(e)}, status=500)
+    
+@csrf_exempt
+@require_http_methods(["GET"])
+def checkIsAdmin(request):
+    try:
+        userId = request.GET.get("userId")
+        admin = Administrator.objects.get(admin_uid=userId)
+        return JsonResponse({"isAdmin": True, "success":True }, status=200)
+    except Administrator.DoesNotExist:
+        return JsonResponse({"isAdmin": False, "success":True}, status=200)
+    except Exception as e:
+        return JsonResponse({"message": str(e), "success": False}, status=500)
