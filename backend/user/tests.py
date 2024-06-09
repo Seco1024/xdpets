@@ -173,20 +173,20 @@ class UserViewsTestCase(TestCase):
 
     def test_delete_pet_authenticated(self):
         self.client.login(username='testuser', password='testpassword')
-        url = reverse('deletePet', args=[self.pet.id])  # 注意這裡需要傳入 pet id
+        url = reverse('deletePet', args=[self.pet.pet_id])  # 注意這裡需要傳入 pet id
         response = self.client.delete(url)
         self.assertEqual(response.status_code, 200)  # 或者你預期的成功代碼
         self.assertTrue(response.json()['success'])
 
     def test_delete_pet_unauthenticated(self):
-        url = reverse('deletePet', args=[self.pet.id])
+        url = reverse('deletePet', args=[self.pet.pet_id])
         response = self.client.delete(url)
         self.assertEqual(response.status_code, 401)  # 或者你預期的錯誤代碼
         self.assertFalse(response.json()['success'])
 
     def test_update_pet_authenticated(self):
         self.client.login(username='testuser', password='testpassword')
-        url = reverse('updatePet', args=[self.pet.id])  # 注意這裡需要傳入 pet id
+        url = reverse('updatePet', args=[self.pet.pet_id])  # 注意這裡需要傳入 pet id
         data = {
             'name': 'Updated Pet',
             'age': 3
@@ -196,7 +196,7 @@ class UserViewsTestCase(TestCase):
         self.assertTrue(response.json()['success'])
 
     def test_update_pet_unauthenticated(self):
-        url = reverse('updatePet', args=[self.pet.id])
+        url = reverse('updatePet', args=[self.pet.pet_id])
         data = {
             'name': 'Updated Pet',
             'age': 3
