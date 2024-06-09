@@ -102,8 +102,12 @@ class SignUpTest(TestCase):
 class UserViewsTestCase(TestCase):
     def setUp(self):
         self.client = Client()
-        self.user = User.objects.create_user(username='testuser', password='testpassword')
-        self.profile = Profile.objects.create(user=self.user)  # 建立 Profile instance 並關聯到 User
+        self.profile = Profile.objects.create(
+            email='testuser@example.com',
+            username='testuser',
+            password='testpassword',
+            phone='1234567890'
+        )
         self.pet = Pet.objects.create(
             name='Test Pet', 
             species='dog', 
