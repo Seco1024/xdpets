@@ -2,11 +2,11 @@ version: '3'
 
 services:
   backend:
-    build: .
+    build: ./backend
     ports:
       - "8000:8000"
     volumes:
-      - .:/app
+      - ./backend:/app
     depends_on:
       - redis
 
@@ -17,10 +17,10 @@ services:
       - "6379:6379"
 
   celery:
-    build: .
+    build: ./backend
     command: celery -A backend worker --loglevel=info
     volumes:
-      - .:/app
+      - ./backend:/app
     depends_on:
       - redis
     environment:
@@ -28,10 +28,10 @@ services:
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
 
   celery-beat:
-    build: .
+    build: ./backend
     command: celery -A backend beat --loglevel=info
     volumes:
-      - .:/app
+      - ./backend:/app
     depends_on:
       - redis
     environment:
@@ -39,7 +39,7 @@ services:
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
 
   migrate:
-    build: .
+    build: ./backend
     command: python manage.py makemigrations && python manage.py migrate
     volumes:
-      - .:/code
+      - ./backend:/code
