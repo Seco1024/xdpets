@@ -10,22 +10,27 @@ import AppBar from "../components/AppBar";
 import MatchTable from "../components/MatchPage/matchTable";
 import Container from "@mui/material/Container";
 import axios from "axios";
-
+import { useUid } from "../components/UidContext";
 export default function Match() {
   const [mode, setMode] = React.useState("light");
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
   const LPtheme = createTheme(getLPTheme(mode));
   const defaultTheme = createTheme({ palette: { mode } });
   const [preferences, setPreferences] = React.useState([]);
-  const userId = "0844d0789054469b9daf9f1d4b1d4cd5";
+  const { uid } = useUid();
   React.useEffect(() => {
     const fetchPreferences = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/match/getPreference?userId=${userId}`
+          `http://localhost:8000/match/getPreference?userId=${uid}`,
+          {
+            withCredentials: true,
+          }
         );
         if (response.status === 200) {
-          setPreferences(response.data["preferenceInfo"]);
+          if (response.data["preferenceInfo"].length > 0) {
+            setPreferences(response.data["preferenceInfo"]);
+          }
         }
       } catch (error) {
         console.error("Error fetching preferences:", error);
@@ -33,7 +38,7 @@ export default function Match() {
     };
 
     fetchPreferences();
-  }, [userId]);
+  }, [uid]);
   return (
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
       <CssBaseline />

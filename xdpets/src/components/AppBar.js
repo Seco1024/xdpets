@@ -15,7 +15,7 @@ import axios from "axios";
 import { useUid } from "./UidContext";
 
 const defaultpages = ["登入/註冊", "領養認養", "刊登送養"];
-const defaultSettings = ["資訊管理", "送養資訊", "媒合系統", "登出"];
+const defaultSettings = ["送養資訊", "媒合系統", "登出"];
 
 function ResponsiveAppBar() {
   const navigate = useNavigate();
@@ -44,7 +44,7 @@ function ResponsiveAppBar() {
           if (checkadmin.status === 200) {
             setIsAdmin(true);
             if (checkadmin.data.isAdmin) {
-              setSettings(["資訊管理", "送養資訊", "媒合系統", "登出"]);
+              setSettings(["送養資訊", "媒合系統", "登出"]);
             } else {
               setIsAdmin(false);
             }

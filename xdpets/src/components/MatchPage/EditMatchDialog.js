@@ -15,15 +15,14 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
-
+import { useUid } from "../UidContext";
 function EditMatchDialog({ open, onClose, data }) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const { handleSubmit, control, reset } = useForm();
-
+  const { uid } = useUid();
   React.useEffect(() => {
-    console.log(data);
     if (data) {
       reset(data);
     }
@@ -40,8 +39,9 @@ function EditMatchDialog({ open, onClose, data }) {
     setSnackbarOpen(false);
   };
   const onSubmit = async (data) => {
+    console.log(uid);
     const postData = {
-      userId: "0844d0789054469b9daf9f1d4b1d4cd5",
+      userId: uid,
       preferenceId: data.id,
       matchInfo: {
         breed: data.breed,
@@ -57,7 +57,8 @@ function EditMatchDialog({ open, onClose, data }) {
     try {
       const response = await axios.post(
         "http://localhost:8000/match/updatePreference",
-        postData
+        postData,
+        { withCredentials: true }
       );
       if (response.status === 200) {
         setSnackbarMessage("更新偏好已成功提交，頁面將自動刷新！");
@@ -70,6 +71,7 @@ function EditMatchDialog({ open, onClose, data }) {
         }, 2000);
       }
     } catch (error) {
+      console.error("Error updating preference:", error);
       if (
         error.response.data.message ==
         "Updating preference will cause duplication."
@@ -104,12 +106,8 @@ function EditMatchDialog({ open, onClose, data }) {
                       variant="outlined"
                       margin="normal"
                     >
-                      <MenuItem value="">未選擇</MenuItem>
                       <MenuItem value="貓">貓</MenuItem>
                       <MenuItem value="狗">狗</MenuItem>
-                      <MenuItem value="兔">兔</MenuItem>
-                      <MenuItem value="鼠">鼠</MenuItem>
-                      <MenuItem value="龜">龜</MenuItem>
                       <MenuItem value="鳥">鳥</MenuItem>
                       <MenuItem value="其他">其他</MenuItem>
                     </TextField>
@@ -125,18 +123,10 @@ function EditMatchDialog({ open, onClose, data }) {
                     <TextField
                       {...field}
                       label="毛色"
-                      select
                       fullWidth
                       variant="outlined"
                       margin="normal"
-                    >
-                      <MenuItem value="">未選擇</MenuItem>
-                      <MenuItem value="黑">黑</MenuItem>
-                      <MenuItem value="白">白</MenuItem>
-                      <MenuItem value="黄">黄</MenuItem>
-                      <MenuItem value="灰">灰</MenuItem>
-                      <MenuItem value="其他">其他</MenuItem>
-                    </TextField>
+                    ></TextField>
                   )}
                 />
               </Grid>
@@ -154,10 +144,8 @@ function EditMatchDialog({ open, onClose, data }) {
                       variant="outlined"
                       margin="normal"
                     >
-                      <MenuItem value="">未選擇</MenuItem>
                       <MenuItem value="公">公</MenuItem>
                       <MenuItem value="母">母</MenuItem>
-                      <MenuItem value="其他">其他</MenuItem>
                     </TextField>
                   )}
                 />
@@ -176,7 +164,7 @@ function EditMatchDialog({ open, onClose, data }) {
                       variant="outlined"
                       margin="normal"
                     >
-                      <MenuItem value="">未選擇</MenuItem>
+                      <MenuItem value="米你">米你</MenuItem>
                       <MenuItem value="小">小</MenuItem>
                       <MenuItem value="中">中</MenuItem>
                       <MenuItem value="大">大</MenuItem>
@@ -231,7 +219,6 @@ function EditMatchDialog({ open, onClose, data }) {
                       variant="outlined"
                       margin="normal"
                     >
-                      <MenuItem value="">未選擇</MenuItem>
                       <MenuItem value="是">是</MenuItem>
                       <MenuItem value="否">否</MenuItem>
                     </TextField>

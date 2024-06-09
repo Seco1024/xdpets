@@ -13,11 +13,10 @@ import {
   Alert,
 } from "@mui/material";
 import axios from "axios";
-
+import { useUid } from "../UidContext";
 const filterRegionOption = {
   label: "區域",
   options: [
-    "不限定",
     "台北市",
     "新北市",
     "桃園市",
@@ -45,12 +44,12 @@ const filterRegionOption = {
 
 const filterGenderOption = {
   label: "性別",
-  options: ["不限定", "公", "母"],
+  options: ["公", "母"],
 };
 
 const filterSpeciesOption = {
   label: "種類",
-  options: ["不限定", "貓", "狗", "龜", "鳥", "兔", "鼠", "其他"],
+  options: ["貓", "狗", "鳥", "其他"],
 };
 
 function FormDialog({ setRows, rows }) {
@@ -59,7 +58,7 @@ function FormDialog({ setRows, rows }) {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const { handleSubmit, control, reset } = useForm();
-
+  const { uid } = useUid();
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -78,7 +77,7 @@ function FormDialog({ setRows, rows }) {
 
   const onSubmit = async (data) => {
     const postData = {
-      userId: "0844d0789054469b9daf9f1d4b1d4cd5",
+      userId: uid,
       PreferenceInfo: {
         breed: data.breed,
         category: data.type,
@@ -94,7 +93,10 @@ function FormDialog({ setRows, rows }) {
     try {
       const response = await axios.post(
         "http://localhost:8000/match/addPreference",
-        postData
+        postData,
+        {
+          withCredentials: true,
+        }
       );
       if (response.status === 201) {
         setSnackbarMessage("偏好已成功提交，頁面將自動刷新！");
@@ -165,7 +167,6 @@ function FormDialog({ setRows, rows }) {
                     <TextField
                       {...field}
                       label="毛色"
-                      select
                       fullWidth
                       variant="outlined"
                       margin="normal"
@@ -173,14 +174,7 @@ function FormDialog({ setRows, rows }) {
                       helperText={
                         fieldState.error ? fieldState.error.message : ""
                       }
-                    >
-                      <MenuItem value="">不限定</MenuItem>
-                      <MenuItem value="黑">黑</MenuItem>
-                      <MenuItem value="白">白</MenuItem>
-                      <MenuItem value="黄">黄</MenuItem>
-                      <MenuItem value="灰">灰</MenuItem>
-                      <MenuItem value="其他">其他</MenuItem>
-                    </TextField>
+                    ></TextField>
                   )}
                 />
               </Grid>
@@ -231,7 +225,7 @@ function FormDialog({ setRows, rows }) {
                         fieldState.error ? fieldState.error.message : ""
                       }
                     >
-                      <MenuItem value="">不限定</MenuItem>
+                      <MenuItem value="米你">米你</MenuItem>
                       <MenuItem value="小">小</MenuItem>
                       <MenuItem value="中">中</MenuItem>
                       <MenuItem value="大">大</MenuItem>
@@ -311,7 +305,6 @@ function FormDialog({ setRows, rows }) {
                         fieldState.error ? fieldState.error.message : ""
                       }
                     >
-                      <MenuItem value="">不限定</MenuItem>
                       <MenuItem value="是">是</MenuItem>
                       <MenuItem value="否">否</MenuItem>
                     </TextField>

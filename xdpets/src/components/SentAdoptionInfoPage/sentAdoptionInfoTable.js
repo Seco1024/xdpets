@@ -17,7 +17,7 @@ import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import DeleteDialog from "../MatchPage/DeleteDialog";
 import { useUid } from "../UidContext"; // Adjust the path if necessary
 import { useNavigate } from "react-router-dom";
-
+import qs from "qs";
 function PetTable({ items, onEdit, onDelete }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
@@ -135,18 +135,29 @@ function SentAdoptionInfoTable() {
 
   const handleDeleteConfirm = async () => {
     try {
-      let request = await axios.post("http://localhost:8000/user/deletePet/", {
-        ownerId: uid,
-        pet_id: deleteId,
-      });
+      let request = await axios.post(
+        "http://localhost:8000/user/deletePet/",
+        qs.stringify({
+          ownerId: uid,
+          petId: deleteId,
+        }),
+        { withCredentials: true }
+      );
 
       if (request.status === 200) {
-        setDeleteSnackbarMessage("刪除成功");
+        setDeleteSnackbarMessage("刪除成功，頁面即將刷新");
         setDeleteSnackbarSeverity("success");
         setDeleteSnackbarOpen(true);
         handleDeleteDialogClose();
+
+        // reload the page after 2 seconds
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
     } catch (error) {
+      console.error("Error deleting pet", error);
       if (error.response.meassage === "Preference not found") {
         setDeleteSnackbarMessage("無此寵物");
         setDeleteSnackbarSeverity("error");

@@ -160,32 +160,8 @@ function SentAdoptionInfoTable() {
           {
             petId: actionId,
             isLegal: true,
-            withCredentials: true,
-          }
-        );
-        if (response.status === 200) {
-          setData((prevData) =>
-            prevData.filter((item) => item.id !== actionId)
-          );
-          setSnackbarMessage(`刪除成功`);
-          setAlertSeverity("success");
-        } else {
-          setSnackbarMessage(`刪除失敗`);
-          setAlertSeverity("error");
-        }
-      } catch (error) {
-        setSnackbarMessage(`刪除失敗`);
-        setAlertSeverity("error");
-      }
-      setSnackbarMessage(`通過成功`);
-      setAlertSeverity("success");
-    } else if (actionType === "delete") {
-      try {
-        const response = await axios.put(
-          `http://localhost:8000/administrator/judgePet`,
+          },
           {
-            petId: actionId,
-            isLegal: false,
             withCredentials: true,
           }
         );
@@ -201,6 +177,33 @@ function SentAdoptionInfoTable() {
         }
       } catch (error) {
         setSnackbarMessage(`通過失敗`);
+        setAlertSeverity("error");
+      }
+      setSnackbarOpen(true);
+    } else if (actionType === "delete") {
+      try {
+        const response = await axios.put(
+          `http://localhost:8000/administrator/judgePet`,
+          {
+            petId: actionId,
+            isLegal: false,
+          },
+          {
+            withCredentials: true,
+          }
+        );
+        if (response.status === 200) {
+          setData((prevData) =>
+            prevData.filter((item) => item.id !== actionId)
+          );
+          setSnackbarMessage(`刪除成功`);
+          setAlertSeverity("success");
+        } else {
+          setSnackbarMessage(`刪除失敗`);
+          setAlertSeverity("error");
+        }
+      } catch (error) {
+        setSnackbarMessage(`刪除失敗`);
         setAlertSeverity("error");
       }
       setSnackbarOpen(true);
