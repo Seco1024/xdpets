@@ -72,17 +72,17 @@ class PreferenceViewTests(TestCase):
         #self.assertEqual(len(response.json()['preferences']), 1)
 
     def test_no_preferences_found(self):
-        response = self.client.get(reverse('get_preference'), {'userId': 'unknown'}, content_type='application/json')
+        response = self.client.get(reverse('getPreference'), {'userId': 'unknown'}, content_type='application/json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()['preferences']), 0)
 
     def test_invalid_json(self):
-        response = self.client.get(reverse('get_preference'), {'userId': '{badjson}'}, content_type='application/json')
+        response = self.client.get(reverse('getPreference'), {'userId': '{badjson}'}, content_type='application/json')
         self.assertEqual(response.status_code, 400)
 
     def test_profile_not_found(self):
         # Assuming Profile.DoesNotExist is handled internally
-        response = self.client.get(reverse('get_preference'), {'userId': 'nonexistentuser'}, content_type='application/json')
+        response = self.client.get(reverse('getPreference'), {'userId': 'nonexistentuser'}, content_type='application/json')
         self.assertEqual(response.status_code, 404)
 
 
