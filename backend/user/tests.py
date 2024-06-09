@@ -103,12 +103,13 @@ class UserViewsTestCase(TestCase):
     def setUp(self):
         self.client = Client()
         self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.profile = Profile.objects.create(user=self.user)  # 建立 Profile instance 並關聯到 User
         self.pet = Pet.objects.create(
             name='Test Pet', 
             species='dog', 
             breed='Golden Retriever', 
             age=2, 
-            owner=self.user
+            owner=self.profile
         )
     def test_login_success(self):
         url = reverse('login')  # 使用 reverse 產生 URL
