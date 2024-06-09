@@ -66,12 +66,11 @@ class PreferenceViewTests(TestCase):
             }
         }
         response = self.client.post(url, json.dumps(data), content_type="application/json")
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 201)
     
     def test_get_preference_success(self):
         response = self.client.get(reverse('getPreference'), {'uid': self.profile}, content_type='application/json')
         print(response)
-        self.assertEqual(response, 200)
         self.assertEqual(response.status_code, 200)
         #self.assertEqual(len(response.json()['preferences']), 1)
 
