@@ -194,3 +194,20 @@ def checkIsAdmin(request):
         return JsonResponse({"isAdmin": False, "success": True}, status=200)
     except Exception as e:
         return JsonResponse({"message": str(e), "success": False}, status=500)
+    
+@admin_required()
+@csrf_exempt
+@require_http_methods(["POST"])
+def deleteUser(request):
+    try:
+        data = json.loads(request.body)
+        user_profile = Profile.objects.get(uid=data["userId"])
+        user_profile.delete()
+        return JsonResponse({"message": "User deleted successfully.", "success": True}, status=200)
+
+    except Profile.DoesNotExist:
+        return JsonResponse({"message": "User not found.", "success": False}, status=404)
+    except json.JSONDecodeError:
+        return JsonResponse({"message": "Invalid JSON.", "success": False}, status=400)
+    except Exception as e:
+        return JsonResponse({"message": str(e), "success": False}, status=500)
