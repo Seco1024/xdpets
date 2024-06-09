@@ -109,11 +109,18 @@ class UserViewsTestCase(TestCase):
             phone='1234567890'
         )
         self.pet = Pet.objects.create(
-            name='Test Pet', 
-            species='dog', 
+            pet_name='Test Pet', 
             breed='Golden Retriever', 
-            age=2, 
-            owner=self.profile
+            category='狗',  # 根據你的實際分類
+            gender='公',  # 根據你的實際性別
+            size='medium',  # 根據你的實際大小
+            region='Taipei',  # 根據你的實際地區
+            age='2', 
+            coat_color='golden',  # 根據你的實際毛色
+            ligated=True,  # 根據你的實際情況
+            info='A friendly dog',  # 根據你的實際描述
+            legal=True,  # 根據你的實際情況
+            owner=self.profile  # 傳入 Profile instance
         )
     def test_login_success(self):
         url = reverse('login')  # 使用 reverse 產生 URL
