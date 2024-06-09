@@ -122,6 +122,9 @@ class UserViewsTestCase(TestCase):
             legal=True,  # 根據你的實際情況
             owner=self.profile  # 傳入 Profile instance
         )
+        session = self.client.session
+        session['uid'] = str(self.profile.uid)
+        session.save()
     def test_login_success(self):
         url = reverse('login')  # 使用 reverse 產生 URL
         response = self.client.post(url, {'username': 'testuser', 'password': 'testpassword'})
