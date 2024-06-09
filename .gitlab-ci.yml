@@ -29,7 +29,7 @@ test_backend:
     - cp /home/gitlab-runner/.env .
     - docker compose up --build -d
     - sleep 30
-    - docker exec -i backend-backend-1 bash -c "source .env && coverage run --source='.' manage.py test"
+    - docker exec -i backend-backend-1 bash -c "source .env && coverage run --source='.' manage.py test && coverage report && coverage xml -o coverage.xml"
   after_script:
     - cd ./backend
     - docker compose down
@@ -38,3 +38,8 @@ test_backend:
   when: always
   tags:
     - nccutrial_backend
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: ./backend/coverage.xml
