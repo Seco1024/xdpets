@@ -47,7 +47,7 @@ class PreferenceViewTests(TestCase):
         )
 
         session = self.client.session
-        
+        session['uid'] = str(self.preference.uid)
         session.save()
 
     def test_add_preference(self):
