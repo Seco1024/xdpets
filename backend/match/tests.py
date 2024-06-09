@@ -47,7 +47,7 @@ class PreferenceViewTests(TestCase):
         )
 
     def test_add_preference(self):
-        url = "127.0.0.1:8000/match/addPreference"
+        url = reverse("addPreference")
         data = {
             'userId': str(self.profile.uid),
             'PreferenceInfo': {
@@ -65,7 +65,7 @@ class PreferenceViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
     
     def test_get_preference_success(self):
-        response = self.client.get("match/getPreference", {'uid': self.profile}, content_type='application/json')
+        response = self.client.get(reverse('getPreference'), {'uid': self.profile}, content_type='application/json')
         print(response)
         self.assertEqual(response, 200)
         self.assertEqual(response.status_code, 200)
@@ -91,7 +91,7 @@ class PreferenceViewTests(TestCase):
         url = reverse('updatePreference')
         data = {
             'preferenceId': str(self.preference.preferenceId),
-            'userId': self.profile.uid,
+            'userId': str(self.profile.uid),
             'matchInfo': {
                 'age': 6
             }
@@ -105,7 +105,7 @@ class PreferenceViewTests(TestCase):
         url = reverse('deletePreference')
         data = {
             'preferenceId': str(self.preference.preferenceId),
-            'userId': self.profile.uid
+            'userId': str(self.profile.uid)
         }
         response = self.client.post(url, json.dumps(data), content_type="application/json")
         self.assertEqual(response.status_code, 200)
