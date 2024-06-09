@@ -195,7 +195,7 @@ def checkIsAdmin(request):
     except Exception as e:
         return JsonResponse({"message": str(e), "success": False}, status=500)
     
-# @admin_required()
+@admin_required()
 @csrf_exempt
 @require_http_methods(["POST"])
 def deleteUser(request):
