@@ -183,8 +183,9 @@ class UserViewsTestCase(TestCase):
 
     def test_delete_pet_authenticated(self):
         self.client.login(username='testuser', password='testpassword')
-        url = reverse('deletePet', args=[self.pet.pet_id])  # 注意這裡需要傳入 pet id
-        response = self.client.delete(url)
+        url = reverse('deletePet')
+        data = {'ownerId': str(self.profile.uid), 'petId': str(self.pet.pet_id)}
+        response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)  # 或者你預期的成功代碼
         self.assertTrue(response.json()['success'])
 
@@ -196,13 +197,15 @@ class UserViewsTestCase(TestCase):
 
     def test_update_pet_authenticated(self):
         self.client.login(username='testuser', password='testpassword')
-        url = reverse('updatePet', args=[self.pet.pet_id])  # 注意這裡需要傳入 pet id
+        url = reverse('updatePet')
         data = {
+            'ownerId': str(self.profile.uid),
+            'petId': str(self.pet.pet_id),
             'name': 'Updated Pet',
-            'age': 3
+            'age': '3'
         }
-        response = self.client.put(url, data, content_type='application/json')  # 根據你的 API 需求，可能需要指定 content_type
-        self.assertEqual(response.status_code, 200)  # 或者你預期的成功代碼
+        response = self.client.post(url, data, content_type='application/json')
+        self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json()['success'])
 
     def test_update_pet_unauthenticated(self):
