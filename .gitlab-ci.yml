@@ -18,6 +18,7 @@ variables:
   GCP_HOST: $GCP_HOST
   GCP_USER: $GCP_USER
   GCP_SSH_PRIVATE_KEY: $GCP_SSH_PRIVATE_KEY
+  DOCKER_TLS_CERTDIR: ""
 
 test_frontend:
   stage: test_frontend
