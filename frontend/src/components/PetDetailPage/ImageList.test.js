@@ -21,7 +21,7 @@ describe('ImageList', () => {
 
     // Check if the first image is selected by default
     const selectedImage = screen.getByAltText('Selected');
-    expect(selectedImage).toHaveAttribute('src', catData.images_urls[0]);
+    expect(selectedImage).toHaveAttribute('src', `${window.location.origin}/images/cat1.jpg`);
   });
 
   test('changes selected image on click', () => {
@@ -33,7 +33,7 @@ describe('ImageList', () => {
 
     // Check if the second image is selected
     const selectedImage = screen.getByAltText('Selected');
-    expect(selectedImage).toHaveAttribute('src', catData.images_urls[1]);
+    expect(selectedImage).toHaveAttribute('src', `${window.location.origin}/images/cat2.jpg`);
   });
 
   test('updates opacity on hover', () => {
