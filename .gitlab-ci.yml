@@ -56,8 +56,6 @@ build:
     - docker:dind
   before_script:
     - echo "$DOCKER_USER"
-    - echo "$DOCKER_PASSWORD"
-    - echo "$DOCKER_REGISTRY"
     - echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USER --password-stdin
   script:
     - docker info
@@ -67,7 +65,6 @@ build:
     - cicdrunner
   only:
     - BackEnd
-    
 
 
 # deploy:
