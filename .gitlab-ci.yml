@@ -13,7 +13,7 @@ test_frontend:
   stage: test_frontend
   image: node:current-alpine3.16
   script:
-    - cd ./xdpets
+    - cd ./frontend
     - npm install
     - npm test -- --coverage --watchAll=false
   only:
@@ -23,7 +23,7 @@ test_frontend:
     - nccutrial_frontend
   artifacts:
     paths:
-      - ./xdpets/coverage/
+      - ./frontend/coverage/
     when: always
   coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)%/'
 
