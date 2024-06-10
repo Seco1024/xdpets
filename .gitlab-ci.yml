@@ -62,6 +62,7 @@ build:
     - docker-compose -f docker-compose.yml push
   tags:
     - cicdrunner
+    
 
 # deploy:
 #   stage: deploy
