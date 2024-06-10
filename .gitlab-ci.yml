@@ -13,7 +13,7 @@ test_frontend:
   stage: test_frontend
   image: node:current-alpine3.16
   script:
-    - cd ./xdpets
+    - cd ./frontend
     - npm install
     - npm install axios-mock-adapter --save-dev
     - npm install --save-dev @testing-library/react
@@ -25,7 +25,7 @@ test_frontend:
     - nccutrial_frontend
   artifacts:
     paths:
-      - ./xdpets/coverage/
+      - ./frontend/coverage/
     when: always
   coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)%/'
 

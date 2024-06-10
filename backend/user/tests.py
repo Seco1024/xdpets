@@ -138,7 +138,7 @@ class UserViewsTestCase(TestCase):
     def test_get_information_authenticated(self):
         self.client.login(username='testuser', password='testpassword')
         url = reverse('getInformation')
-        response = self.client.get(url)
+        response = self.client.get(url, {'uid': str(self.profile.uid)})
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json()['success'])
     def test_get_information_unauthenticated(self):
@@ -172,10 +172,17 @@ class UserViewsTestCase(TestCase):
     def test_add_new_pet_unauthenticated(self):
         url = reverse('addNewPet')
         data = {
+            'ownerId': str(self.profile.uid),
             'name': 'New Pet',
-            'species': 'cat',
             'breed': 'Persian',
-            'age': 1
+            'category': '貓',
+            'gender': '公',
+            'size': 'small',
+            'region': 'Region1',
+            'age': '1',
+            'coat_color': 'white',
+            'ligated': 'yes',
+            'info': 'This is a new pet',
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 401)  # 或者你預期的錯誤代碼
@@ -190,8 +197,9 @@ class UserViewsTestCase(TestCase):
         self.assertTrue(response.json()['success'])
 
     def test_delete_pet_unauthenticated(self):
-        url = reverse('deletePet', args=[self.pet.pet_id])
-        response = self.client.delete(url)
+        url = reverse('deletePet')
+        data = {'ownerId': str(self.profile.uid), 'petId': str(self.pet.pet_id)}
+        response = self.client.post(url, data)
         self.assertEqual(response.status_code, 401)  # 或者你預期的錯誤代碼
         self.assertFalse(response.json()['success'])
 
@@ -209,12 +217,14 @@ class UserViewsTestCase(TestCase):
         self.assertTrue(response.json()['success'])
 
     def test_update_pet_unauthenticated(self):
-        url = reverse('updatePet', args=[self.pet.pet_id])
+        url = reverse('updatePet')
         data = {
+            'ownerId': str(self.profile.uid),
+            'petId': str(self.pet.pet_id),
             'name': 'Updated Pet',
-            'age': 3
+            'age': '3'
         }
-        response = self.client.put(url, data, content_type='application/json')
+        response = self.client.post(url, data, content_type='application/json')
         self.assertEqual(response.status_code, 401)  # 或者你預期的錯誤代碼
         self.assertFalse(response.json()['success'])
 
