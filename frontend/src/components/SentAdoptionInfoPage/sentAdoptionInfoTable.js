@@ -17,7 +17,8 @@ import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import DeleteDialog from "../MatchPage/DeleteDialog";
 import { useUid } from "../UidContext"; // Adjust the path if necessary
 import { useNavigate } from "react-router-dom";
-
+import InsertLinkIcon from "@mui/icons-material/InsertLink";
+import qs from "qs";
 function PetTable({ items, onEdit, onDelete }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
@@ -48,18 +49,19 @@ function PetTable({ items, onEdit, onDelete }) {
               <TableCell>Breed</TableCell>
               <TableCell>Gender</TableCell>
               <TableCell>Age</TableCell>
+              <TableCell>Link</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {paginatedItems.map((pet) => (
               <TableRow key={pet.pet_id}>
                 <TableCell>
-                  <IconButton
+                  {/* <IconButton
                     aria-label="edit"
                     onClick={() => onEdit(pet.pet_id)}
                   >
                     <EditIcon />
-                  </IconButton>
+                  </IconButton> */}
                   <IconButton
                     aria-label="delete"
                     onClick={() => onDelete(pet.pet_id)}
@@ -72,6 +74,17 @@ function PetTable({ items, onEdit, onDelete }) {
                 <TableCell>{pet.breed}</TableCell>
                 <TableCell>{pet.gender}</TableCell>
                 <TableCell>{pet.age}</TableCell>
+                <TableCell>
+                  <IconButton
+                    aria-label="link"
+                    onClick={() =>
+                      window.open(`http://localhost:3000/pets/${pet.pet_id}`)
+                    }
+                  >
+                    寵物連結
+                    <InsertLinkIcon />
+                  </IconButton>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -135,18 +148,29 @@ function SentAdoptionInfoTable() {
 
   const handleDeleteConfirm = async () => {
     try {
-      let request = await axios.post("http://localhost:8000/user/deletePet/", {
-        ownerId: uid,
-        pet_id: deleteId,
-      });
+      let request = await axios.post(
+        "http://localhost:8000/user/deletePet/",
+        qs.stringify({
+          ownerId: uid,
+          petId: deleteId,
+        }),
+        { withCredentials: true }
+      );
 
       if (request.status === 200) {
-        setDeleteSnackbarMessage("刪除成功");
+        setDeleteSnackbarMessage("刪除成功，頁面即將刷新");
         setDeleteSnackbarSeverity("success");
         setDeleteSnackbarOpen(true);
         handleDeleteDialogClose();
+
+        // reload the page after 2 seconds
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
     } catch (error) {
+      console.error("Error deleting pet", error);
       if (error.response.meassage === "Preference not found") {
         setDeleteSnackbarMessage("無此寵物");
         setDeleteSnackbarSeverity("error");

@@ -15,7 +15,7 @@ import axios from "axios";
 import { useUid } from "./UidContext";
 
 const defaultpages = ["登入/註冊", "領養認養", "刊登送養"];
-const defaultSettings = ["資訊管理", "送養資訊", "媒合系統", "登出"];
+const defaultSettings = ["送養資訊", "媒合系統", "登出"];
 
 function ResponsiveAppBar() {
   const navigate = useNavigate();
@@ -38,21 +38,20 @@ function ResponsiveAppBar() {
           setPages(["會員中心", "領養認養", "刊登送養"]);
           setIsLoggedIn(true);
           const checkadmin = await axios.get(
-            `http://localhost:8000/administrator/isAdmin?userId=${uid}`
+            `http://localhost:8000/administrator/checkIsAdmin?userId=${uid}`
           );
-          setIsAdmin(true);
-          if (checkadmin.isAdmin) {
-            setSettings([
-              "資訊管理",
-              "送養資訊",
-              "媒合系統",
-              "管理員介面",
-              "登出",
-            ]);
+
+          if (checkadmin.status === 200) {
+            setIsAdmin(true);
+            if (checkadmin.data.isAdmin) {
+              setSettings(["送養資訊", "媒合系統", "登出"]);
+            } else {
+              setIsAdmin(false);
+            }
           }
         }
       } catch (error) {
-        setIsAdmin(true);
+        setIsAdmin(false);
         console.error("Error checking login status", error);
       }
     };

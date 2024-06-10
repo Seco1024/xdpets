@@ -122,7 +122,10 @@ function SentAdoptionInfoTable() {
     const fetchData = async () => {
       try {
         let response = await axios.get(
-          "http://localhost:8000/administrator/getUnjudgedPets"
+          "http://localhost:8000/administrator/getUnjudgedPets",
+          {
+            withCredentials: true,
+          }
         );
 
         if (response.status === 200) {
@@ -157,31 +160,9 @@ function SentAdoptionInfoTable() {
           {
             petId: actionId,
             isLegal: true,
-          }
-        );
-        if (response.status === 200) {
-          setData((prevData) =>
-            prevData.filter((item) => item.id !== actionId)
-          );
-          setSnackbarMessage(`刪除成功`);
-          setAlertSeverity("success");
-        } else {
-          setSnackbarMessage(`刪除失敗`);
-          setAlertSeverity("error");
-        }
-      } catch (error) {
-        setSnackbarMessage(`刪除失敗`);
-        setAlertSeverity("error");
-      }
-      setSnackbarMessage(`通過成功`);
-      setAlertSeverity("success");
-    } else if (actionType === "delete") {
-      try {
-        const response = await axios.put(
-          `http://localhost:8000/administrator/judgePet`,
+          },
           {
-            petId: actionId,
-            isLegal: false,
+            withCredentials: true,
           }
         );
         if (response.status === 200) {
@@ -196,6 +177,33 @@ function SentAdoptionInfoTable() {
         }
       } catch (error) {
         setSnackbarMessage(`通過失敗`);
+        setAlertSeverity("error");
+      }
+      setSnackbarOpen(true);
+    } else if (actionType === "delete") {
+      try {
+        const response = await axios.put(
+          `http://localhost:8000/administrator/judgePet`,
+          {
+            petId: actionId,
+            isLegal: false,
+          },
+          {
+            withCredentials: true,
+          }
+        );
+        if (response.status === 200) {
+          setData((prevData) =>
+            prevData.filter((item) => item.id !== actionId)
+          );
+          setSnackbarMessage(`刪除成功`);
+          setAlertSeverity("success");
+        } else {
+          setSnackbarMessage(`刪除失敗`);
+          setAlertSeverity("error");
+        }
+      } catch (error) {
+        setSnackbarMessage(`刪除失敗`);
         setAlertSeverity("error");
       }
       setSnackbarOpen(true);
@@ -221,7 +229,7 @@ function SentAdoptionInfoTable() {
   const handleShow = async (id) => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/pet/getPet/?user_id=59d9730ce77c4ada95a95c7116b471bc&pet_id=${id}`
+        `http://localhost:8000/pet/getPet/?pet_id=${id}`
       );
       if (response.status === 200) {
         setPetDetails(response.data["PetInformation"]);

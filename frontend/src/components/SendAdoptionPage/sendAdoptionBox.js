@@ -143,7 +143,13 @@ const SendAdoptionBox = ({ isCheckboxChecked }) => {
 
       if (response.status === 200 && response.data.success) {
         console.log("Pet added successfully:", response.data.pet_info);
-        navigate("/sentadoptioninfo");
+
+        setSnackbarOpen(true);
+        setSnackbarMessage("送養資訊已成功送出");
+
+        setTimeout(() => {
+          navigate("/main");
+        }, 1000);
       } else {
         console.error("Error adding pet:", response.data.message);
       }

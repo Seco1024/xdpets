@@ -23,12 +23,9 @@ export default function ContactCard({ owner_id }) {
   React.useEffect(() => {
     if (loggedIn && owner_id) {
       axios
-        .get(
-          `http://localhost:8000/user/getInformation/?uid=0844d0789054469b9daf9f1d4b1d4cd5`,
-          {
-            withCredentials: true,
-          }
-        )
+        .get(`http://localhost:8000/user/getInformation/?uid=${owner_id}`, {
+          withCredentials: true,
+        })
         .then((response) => {
           setContactInfo(response.data.data);
           console.log(response.data.data);

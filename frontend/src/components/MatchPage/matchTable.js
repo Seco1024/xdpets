@@ -17,7 +17,7 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-
+import { useUid } from "../UidContext";
 function EditToolbar(props) {
   const { setRows, setRowModesModel } = props;
   return (
@@ -37,11 +37,13 @@ export default function MatchTable({ preferences }) {
   const [snackbarOpen, setDeleteSnackbarOpen] = useState(false);
   const [snackbarMessage, setDeleteSnackbarMessage] = useState("");
   const [snackbarSeverity, setDeleteSnackbarSeverity] = useState("success");
+  const { uid } = useUid();
   useEffect(() => {
     // Transform preferences data to match the structure expected by DataGrid
     const transformedRows = preferences.map((preference, index) => ({
       id: preference.preferenceId, // Use index as id or preference.id if available
-      status: preference.status || "未通知",
+      // if preference.matched is False, set status to "未通知" else set to 已通知
+      status: preference.matched ? "已通知" : "未通知",
       type: preference.category || "未選擇",
       breed: preference.breed || "未知",
       region: preference.region || "未知",
@@ -80,8 +82,9 @@ export default function MatchTable({ preferences }) {
         "http://localhost:8000/match/deletePreference",
         {
           preferenceId: rowToDelete.id,
-          userId: "0844d0789054469b9daf9f1d4b1d4cd5",
-        }
+          userId: uid,
+        },
+        { withCredentials: true }
       );
 
       if (request.status === 200) {
@@ -92,6 +95,7 @@ export default function MatchTable({ preferences }) {
         handleDeleteDialogClose();
       }
     } catch (error) {
+      console.error("Error deleting preference:", error);
       if (error.response.meassage === "Preference not found") {
         setDeleteSnackbarMessage("無此偏好");
         setDeleteSnackbarSeverity("error");
@@ -138,21 +142,34 @@ export default function MatchTable({ preferences }) {
       width: 100,
       cellClassName: "actions",
       getActions: ({ id }) => {
-        return [
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            className="textPrimary"
-            onClick={handleEditClick(id)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={handleDeleteClick(id)}
-            color="inherit"
-          />,
-        ];
+        const item = rows.find((row) => row.id === id);
+
+        if (item.matched == false) {
+          return [
+            <GridActionsCellItem
+              icon={<DeleteIcon />}
+              label="Delete"
+              onClick={handleDeleteClick(id)}
+              color="inherit"
+            />,
+          ];
+        } else {
+          return [
+            <GridActionsCellItem
+              icon={<EditIcon />}
+              label="Edit"
+              className="textPrimary"
+              onClick={handleEditClick(id)}
+              color="inherit"
+            />,
+            <GridActionsCellItem
+              icon={<DeleteIcon />}
+              label="Delete"
+              onClick={handleDeleteClick(id)}
+              color="inherit"
+            />,
+          ];
+        }
       },
     },
     {
