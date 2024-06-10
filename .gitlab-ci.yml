@@ -55,14 +55,15 @@ build:
   services:
     - docker:dind
   before_script:
-    - echo "{\"auths\":{\"$DOCKER_REGISTRY\":{\"auth\":\"$(echo -n $DOCKER_USERNAME:$DOCKER_PASSWORD | base64)\"}}}" > ~/.docker/config.json
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin $DOCKER_REGISTRY
   script:
     - docker info
     - docker-compose -f docker-compose.yml build
     - docker-compose -f docker-compose.yml push
   tags:
     - cicdrunner
-    
+  only:
+    - BackEnd
 
 # deploy:
 #   stage: deploy
