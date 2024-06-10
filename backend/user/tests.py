@@ -150,14 +150,24 @@ class UserViewsTestCase(TestCase):
         self.client.login(username='testuser', password='testpassword')
         url = reverse('addNewPet')
         data = {
+            'ownerId': str(self.profile.uid),
             'name': 'New Pet',
-            'species': 'cat',
             'breed': 'Persian',
-            'age': 1
+            'category': '貓',
+            'gender': '公',
+            'size': 'small',
+            'region': 'Region1',
+            'age': '1',
+            'coat_color': 'white',
+            'ligated': 'yes',
+            'info': 'This is a new pet',
         }
         response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 201)  # 或者你預期的成功代碼
+        self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json()['success'])
+        self.assertIn('pet_info', response.json())
+        self.assertEqual(response.json()['pet_info']['pet_name'], 'New Pet')
+
 
     def test_add_new_pet_unauthenticated(self):
         url = reverse('addNewPet')
