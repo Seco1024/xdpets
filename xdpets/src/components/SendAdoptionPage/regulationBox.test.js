@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import RegulationBox from './RegulationBox';
+import RegulationBox from './regulationBox';
 
 describe('RegulationBox Component', () => {
   test('renders the component and checks initial content', () => {

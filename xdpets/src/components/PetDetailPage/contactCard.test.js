@@ -3,7 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import axios from 'axios';
 import ContactCard from './contactCard';
-import { UidContext } from '../UidContext';
+import { UidProvider } from '../UidContext';
 
 jest.mock('axios');
 
@@ -12,9 +12,9 @@ const mockUidContextValue = { uid: 'test-uid' };
 describe('ContactCard', () => {
   it('renders login prompt when user is not logged in', () => {
     render(
-      <UidContext.Provider value={{ uid: null }}>
+      <UidProvider value={{ uid: null }}>
         <ContactCard owner_id="test-owner-id" />
-      </UidContext.Provider>
+      </UidProvider>
     );
 
     expect(screen.getByText('登入後可查看聯絡資訊')).toBeInTheDocument();
@@ -30,9 +30,9 @@ describe('ContactCard', () => {
     axios.get.mockResolvedValueOnce({ data: { data: contactInfo } });
 
     render(
-      <UidContext.Provider value={mockUidContextValue}>
+      <UidProvider value={mockUidContextValue}>
         <ContactCard owner_id="test-owner-id" />
-      </UidContext.Provider>
+      </UidProvider>
     );
 
     await waitFor(() => {
@@ -46,9 +46,9 @@ describe('ContactCard', () => {
     axios.get.mockRejectedValueOnce(new Error('Error fetching contact info'));
 
     render(
-      <UidContext.Provider value={mockUidContextValue}>
+      <UidProvider value={mockUidContextValue}>
         <ContactCard owner_id="test-owner-id" />
-      </UidContext.Provider>
+      </UidProvider>
     );
 
     await waitFor(() => {

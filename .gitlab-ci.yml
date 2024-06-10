@@ -15,6 +15,8 @@ test_frontend:
   script:
     - cd ./xdpets
     - npm install
+    - npm install axios-mock-adapter --save-dev
+    - npm install --save-dev @testing-library/react
     - npm test -- --coverage --watchAll=false
   only:
     - Test
