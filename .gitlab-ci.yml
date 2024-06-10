@@ -55,10 +55,10 @@ build:
   services:
     - docker:dind
   before_script:
-    - echo "$DOCKER_USERNAME"
+    - echo $DOCKER_USERNAME
     - echo "$DOCKER_PASSWORD"
     - echo "$DOCKER_REGISTRY"
-    - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
+    - echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAM --password-stdin
   script:
     - docker info
     - docker-compose -f docker-compose.yml build
