@@ -17,6 +17,7 @@ import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import DeleteDialog from "../MatchPage/DeleteDialog";
 import { useUid } from "../UidContext"; // Adjust the path if necessary
 import { useNavigate } from "react-router-dom";
+import InsertLinkIcon from "@mui/icons-material/InsertLink";
 import qs from "qs";
 function PetTable({ items, onEdit, onDelete }) {
   const [page, setPage] = useState(0);
@@ -48,18 +49,19 @@ function PetTable({ items, onEdit, onDelete }) {
               <TableCell>Breed</TableCell>
               <TableCell>Gender</TableCell>
               <TableCell>Age</TableCell>
+              <TableCell>Link</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {paginatedItems.map((pet) => (
               <TableRow key={pet.pet_id}>
                 <TableCell>
-                  <IconButton
+                  {/* <IconButton
                     aria-label="edit"
                     onClick={() => onEdit(pet.pet_id)}
                   >
                     <EditIcon />
-                  </IconButton>
+                  </IconButton> */}
                   <IconButton
                     aria-label="delete"
                     onClick={() => onDelete(pet.pet_id)}
@@ -72,6 +74,17 @@ function PetTable({ items, onEdit, onDelete }) {
                 <TableCell>{pet.breed}</TableCell>
                 <TableCell>{pet.gender}</TableCell>
                 <TableCell>{pet.age}</TableCell>
+                <TableCell>
+                  <IconButton
+                    aria-label="link"
+                    onClick={() =>
+                      window.open(`http://localhost:3000/pets/${pet.pet_id}`)
+                    }
+                  >
+                    寵物連結
+                    <InsertLinkIcon />
+                  </IconButton>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
