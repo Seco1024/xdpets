@@ -55,10 +55,10 @@ build:
   services:
     - docker:dind
   script:
-    - echo "$DOCKER_USERNAME"
-    - echo "$DOCKER_PASSWORD"
-    - echo "$DOCKER_REGISTRY"
-    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin $DOCKER_REGISTRY
+    # - echo "DOCKER_USERNAME: $DOCKER_USERNAME"
+    # - echo "DOCKER_PASSWORD: $DOCKER_PASSWORD"
+    # - echo "DOCKER_REGISTRY: $DOCKER_REGISTRY"
+    - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" $DOCKER_REGISTRY
     - docker info
     - docker-compose -f docker-compose.yml build
     - docker-compose -f docker-compose.yml push
