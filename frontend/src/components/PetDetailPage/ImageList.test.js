@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import StandardImageList from './ImageList';
+import ImageList from './ImageList';
 
 const catData = {
   images_urls: [
@@ -11,35 +11,35 @@ const catData = {
   ],
 };
 
-describe('StandardImageList', () => {
+describe('ImageList', () => {
   test('renders image list with the provided data', () => {
-    render(<StandardImageList catData={catData} />);
+    render(<ImageList catData={catData} />);
 
     // Check if images are rendered
     const images = screen.getAllByRole('img');
-    expect(images).toHaveLength(catData.images_urls.length);
+    expect(images).toHaveLength(catData.images_urls.length + 1); // +1 for the selected image
 
     // Check if the first image is selected by default
     const selectedImage = screen.getByAltText('Selected');
-    expect(selectedImage).toHaveAttribute('src', 'http://localhost:8000/images/cat1.jpg');
+    expect(selectedImage).toHaveAttribute('src', catData.images_urls[0]);
   });
 
   test('changes selected image on click', () => {
-    render(<StandardImageList catData={catData} />);
+    render(<ImageList catData={catData} />);
 
     // Click on the second image
-    const secondImage = screen.getAllByRole('img')[1];
+    const secondImage = screen.getAllByAltText('Thumbnail 1')[0];
     fireEvent.click(secondImage);
 
     // Check if the second image is selected
     const selectedImage = screen.getByAltText('Selected');
-    expect(selectedImage).toHaveAttribute('src', 'http://localhost:8000/images/cat2.jpg');
+    expect(selectedImage).toHaveAttribute('src', catData.images_urls[1]);
   });
 
   test('updates opacity on hover', () => {
-    render(<StandardImageList catData={catData} />);
+    render(<ImageList catData={catData} />);
 
-    const images = screen.getAllByRole('img');
+    const images = screen.getAllByAltText(/Thumbnail/);
 
     // Hover over the first image
     fireEvent.mouseOver(images[0]);
@@ -49,8 +49,8 @@ describe('StandardImageList', () => {
     fireEvent.mouseOver(images[1]);
     expect(images[1]).toHaveStyle('opacity: 1');
 
-    // Check the opacity of non-selected images
-    expect(images[0]).toHaveStyle('opacity: 0.5');
-    expect(images[1]).toHaveStyle('opacity: 1');
+    // Move mouse out of second image
+    fireEvent.mouseOut(images[1]);
+    expect(images[1]).toHaveStyle('opacity: 0.5'); // Assuming it's not selected
   });
 });
