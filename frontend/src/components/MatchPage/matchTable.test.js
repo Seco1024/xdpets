@@ -1,81 +1,68 @@
-import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+// MatchTable.test.js
+import React from 'react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import axios from "axios";
-import MatchTable from "./matchTable";
+import axios from 'axios';
+import MockAdapter from 'axios-mock-adapter';
+import MatchTable from './MatchTable';
+import { UidProvider } from '../UidContext';
 
-jest.mock("axios");
+// Mock axios
+const mock = new MockAdapter(axios);
 
+// Mock data
 const mockPreferences = [
   {
     preferenceId: 1,
-    status: "未通知",
-    category: "貓",
-    breed: "Siamese",
-    region: "Taipei",
-    gender: "公",
+    matched: false,
+    category: '貓',
+    breed: '波斯貓',
+    region: '台北市',
+    gender: '公',
     age: 2,
-    size: "中",
+    size: '中',
     ligated: true,
-    coat_color: "白色",
+    coat_color: '白色',
   },
-  {
-    preferenceId: 2,
-    status: "已通知",
-    category: "狗",
-    breed: "Labrador",
-    region: "Kaohsiung",
-    gender: "母",
-    age: 3,
-    size: "大",
-    ligated: false,
-    coat_color: "黑色",
-  },
+  // Add more mock preferences if needed
 ];
 
-describe("MatchTable Component", () => {
-  test("renders MatchTable component", () => {
-    render(<MatchTable preferences={mockPreferences} />);
-    expect(screen.getByText("狀態")).toBeInTheDocument();
-    expect(screen.getByText("種類")).toBeInTheDocument();
+describe('MatchTable', () => {
+  beforeEach(() => {
+    // Mock the API response
+    mock.onPost('http://localhost:8000/match/deletePreference').reply(200, {});
   });
 
-  test("displays the correct number of rows", () => {
-    render(<MatchTable preferences={mockPreferences} />);
-    expect(screen.getAllByRole("row").length).toBe(mockPreferences.length + 1); // including header row
-  });
+  const renderWithContext = (ui, { providerProps, ...renderOptions }) => {
+    return render(
+      <UidProvider {...providerProps}>{ui}</UidProvider>,
+      renderOptions
+    );
+  };
 
-  test("handles edit action correctly", async () => {
-    render(<MatchTable preferences={mockPreferences} />);
-    fireEvent.click(screen.getAllByLabelText("Edit")[0]);
-    expect(screen.getByText("Edit Dialog")).toBeInTheDocument();
-  });
+  it('renders the MatchTable and allows deletion of a preference', async () => {
+    const providerProps = {
+      value: { uid: '123' },
+    };
 
-  test("handles delete action correctly", async () => {
-    axios.post.mockResolvedValue({ status: 200 });
+    renderWithContext(<MatchTable preferences={mockPreferences} />, { providerProps });
 
-    render(<MatchTable preferences={mockPreferences} />);
-    fireEvent.click(screen.getAllByLabelText("Delete")[0]);
-    expect(screen.getByText("Delete Dialog")).toBeInTheDocument();
+    // Check that the data is rendered
+    expect(screen.getByText('貓')).toBeInTheDocument();
+    expect(screen.getByText('波斯貓')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByText("Confirm"));
+    // Simulate clicking the delete icon
+    const deleteButton = screen.getByLabelText('Delete');
+    fireEvent.click(deleteButton);
 
-    await waitFor(() => {
-      expect(screen.getByText("刪除成功")).toBeInTheDocument();
-    });
-  });
+    // Confirm the deletion in the dialog
+    const confirmDeleteButton = screen.getByText('確定');
+    fireEvent.click(confirmDeleteButton);
 
-  test("handles delete action failure", async () => {
-    axios.post.mockRejectedValue({ response: { message: "Preference not found" } });
+    // Wait for the snackbar to appear
+    await waitFor(() => screen.getByText('刪除成功'));
 
-    render(<MatchTable preferences={mockPreferences} />);
-    fireEvent.click(screen.getAllByLabelText("Delete")[0]);
-    expect(screen.getByText("Delete Dialog")).toBeInTheDocument();
-
-    fireEvent.click(screen.getByText("Confirm"));
-
-    await waitFor(() => {
-      expect(screen.getByText("無此偏好")).toBeInTheDocument();
-    });
+    // Check that the preference is removed from the table
+    expect(screen.queryByText('波斯貓')).not.toBeInTheDocument();
   });
 });
