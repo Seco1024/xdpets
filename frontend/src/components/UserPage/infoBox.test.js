@@ -3,16 +3,16 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import axios from 'axios';
 import User from './infoBox';
-import { UidContext } from '../UidContext';
+import { UidProvider } from '../UidContext';
 
 jest.mock('axios');
 
 const renderWithContext = (component) => {
   return {
     ...render(
-      <UidContext.Provider value={{ uid: '12345' }}>
+      <UidProvider value={{ uid: '12345' }}>
         {component}
-      </UidContext.Provider>
+      </UidProvider>
     ),
   };
 };
