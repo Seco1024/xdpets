@@ -162,8 +162,8 @@ function PetInfoTable() {
         `http://localhost:8000/administrator/deletePet`,
         {
           petId: deleteId,
-          withCredentials: true,
-        }
+        },
+        { withCredentials: true }
       );
 
       if (response.status === 200) {

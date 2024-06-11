@@ -50,7 +50,11 @@ export default function StandardImageList({ catData }) {
               srcSet={`${item}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
               src={`${item}?w=164&h=164&fit=crop&auto=format`}
               loading="lazy"
-              alt={`Image ${index + 1}`}
+              alt="cat"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = "/images/catLost.png";
+              }}
             />
           </StyledImageListItem>
         ))}
@@ -61,6 +65,10 @@ export default function StandardImageList({ catData }) {
             src={selectedImage}
             alt="Selected"
             style={{ width: "100%", height: "100%" }}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "/images/catLost.png";
+            }}
           />
         )}
       </Box>

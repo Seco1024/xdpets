@@ -66,7 +66,8 @@ export default function SignUp() {
           password: password,
           username: username,
           phone: phone,
-        })
+        }),
+        { withCredentials: true }
       );
 
       if (response.status === 200) {
@@ -127,7 +128,7 @@ export default function SignUp() {
     handleSignUp(
       data.get("email"),
       data.get("password"),
-      data.get("username"),
+      data.get("Username"),
       data.get("phone")
     );
   };
@@ -199,14 +200,6 @@ export default function SignUp() {
                   type="phone"
                   id="phone"
                   autoComplete="new-phone"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
-                  }
-                  label="I want to receive inspiration, marketing promotions and updates via email."
                 />
               </Grid>
             </Grid>
