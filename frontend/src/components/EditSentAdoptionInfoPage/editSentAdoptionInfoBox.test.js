@@ -30,7 +30,13 @@ mock.onGet("YOUR_API_URL/getPetDetails").reply(200, {
 });
 
 test("renders SendAdoptionBox component", async () => {
-  render(<SendAdoptionBox defaultValues={{}} />);
+  render(
+    <Router>
+      <UidProvider value={{ uid: "test-uid" }}>
+        <SendAdoptionBox defaultValues={{}} />
+      </UidProvider>
+    </Router>
+  );
 
   // Check if the form fields are rendered
   expect(screen.getByLabelText(/Pet Name/i)).toBeInTheDocument();
