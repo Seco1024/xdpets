@@ -56,9 +56,12 @@ build:
   services:
     - docker:dind
   script:
+    - echo "CI_REGISTRY: $CI_REGISTRY"
+    - echo "CI_REGISTRY_USER: $CI_REGISTRY_USER"
+    - echo "DOCKER_REGISTRY_TOKEN: $DOCKER_REGISTRY_TOKEN"
     - docker login $CI_REGISTRY -u $CI_REGISTRY_USER -p $DOCKER_REGISTRY_TOKEN
-    - docker build -t registry.gitlab.com/nccu_se_2024/wait4graduation/xdpets .
-    - docker push registry.gitlab.com/nccu_se_2024/wait4graduation/xdpets
+    - docker build -t registry.gitlab.com/nccu_se_2024/wait4graduation/xdpets:$CI_COMMIT_REF_NAME .
+    - docker push registry.gitlab.com/nccu_se_2024/wait4graduation/xdpets:$CI_COMMIT_REF_NAME
   tags:
     - cicdrunner
   only:
