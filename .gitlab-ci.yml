@@ -55,16 +55,10 @@ build:
   image: docker:latest
   services:
     - docker:dind
-  # before_script:
-  #   - echo "$DOCKER_USER"
-  #   - echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USER --password-stdin
   script:
-    #- docker info
-    docker login $CI_REGISTRY -u $CI_REGISTRY_USER -p $DOCKER_REGISTRY_TOKEN 
-    docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME .
-    docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
-    #- docker-compose -f docker-compose.yml build
-    #- docker-compose -f docker-compose.yml push
+    - docker login $CI_REGISTRY -u $CI_REGISTRY_USER -p $DOCKER_REGISTRY_TOKEN
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
   tags:
     - cicdrunner
   only:
