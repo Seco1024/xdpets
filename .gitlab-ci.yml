@@ -24,14 +24,21 @@ test_frontend:
   stage: test_frontend
   image: node:current-alpine3.16
   script:
-    - cd ./xdpets
+    - cd ./frontend
     - npm install
-    - npm test -- --watchAll=false
+    - npm install axios-mock-adapter --save-dev
+    - npm install --save-dev @testing-library/react
+    - npm test -- --coverage --watchAll=false
   only:
     - Test
   when: always
   tags:
     - nccutrial_frontend
+  artifacts:
+    paths:
+      - ./frontend/coverage/
+    when: always
+  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)%/'
 
 test_backend:
   stage: test_backend
@@ -40,7 +47,7 @@ test_backend:
     - cp /home/gitlab-runner/.env .
     - docker compose up --build -d
     - sleep 30
-    - docker exec -i backend-backend-1 bash -c "source /app/.env && /usr/local/bin/python /app/manage.py test"
+    - docker exec -i backend-backend-1 bash -c "source .env && coverage run --source='.' manage.py test ; result=\$? ; coverage report && coverage xml -o coverage.xml ; exit \$result"
   after_script:
     - cd ./backend
     - docker compose down
@@ -49,36 +56,9 @@ test_backend:
   when: always
   tags:
     - nccutrial_backend
-
-build:
-  stage: build
-  image: docker:latest
-  services:
-    - docker:dind
-  before_script:
-    - echo "$DOCKER_USER"
-    - echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USER --password-stdin
-  script:
-    - docker info
-    - docker-compose -f docker-compose.yml build
-    - docker-compose -f docker-compose.yml push
-  tags:
-    - cicdrunner
-  only:
-    - BackEnd
-
-
-# deploy:
-#   stage: deploy
-#   image: alpine:latest
-#   before_script:
-#     - apk add --no-cache openssh
-#     - mkdir -p ~/.ssh
-#     - echo "$GCP_SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
-#     - chmod 600 ~/.ssh/id_rsa
-#     - ssh-keyscan $GCP_HOST >> ~/.ssh/known_hosts
-#   script:
-#     - ssh $GCP_USER@$GCP_HOST 'docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" $DOCKER_REGISTRY'
-#     - ssh $GCP_USER@$GCP_HOST 'cd /path/to/your/project && docker-compose -f docker-compose.yml pull && docker-compose -f docker-compose.yml up -d'
-#   only:
-#     - main
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: ./backend/coverage.xml
+  coverage: '/TOTAL.*\s+(\d+\%)$/'
