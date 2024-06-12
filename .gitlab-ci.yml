@@ -58,8 +58,8 @@ build:
   before_script:
     - echo "$CI_REGISTRY_TOKEN" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
   script:
-    - docker-compose -f docker-compose.yml build $CI_REGISTRY_IMAGE .
-    - docker-compose -f docker-compose.yml push $CI_REGISTRY_IMAGE
+    - docker-compose -f docker-compose.yml build 
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
   tags:
     - cicdrunner
   only:
