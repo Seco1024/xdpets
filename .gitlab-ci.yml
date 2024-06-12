@@ -55,9 +55,8 @@ build:
   image: docker:latest
   services:
     - docker:dind
-  before_script:
-    - docker login $CI_REGISTRY -u $CI_REGISTRY_USER -p $DOCKER_REGISTRY_TOKEN
   script:
+    - docker login -u $CI_REGISTRY_USER -p $DOCKER_REGISTRY_TOKEN $CI_REGISTRY
     - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME .
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
   tags:
