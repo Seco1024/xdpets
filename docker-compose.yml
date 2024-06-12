@@ -5,8 +5,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: registry.gitlab.com/nccu_se_2024/wait4graduation/xdpets:$CI_COMMIT_REF_NAME
-    
+    image: registry.gitlab.com/nccu_se_2024/wait4graduation/xdpets
+
   frontend:
     build: ./frontend
     ports:
