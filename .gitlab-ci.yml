@@ -58,9 +58,9 @@ build:
   before_script:
     - echo "$CI_REGISTRY_TOKEN" | docker login -u "$CI_REGISTRY_USER" --password-stdin
   script:
-    - docker-compose -f docker-compose.yml build
+    - docker-compose -f docker-compose.yml build -t "latest"
     - docker images
-    - docker-compose -f docker-compose.yml push allenw4/xdpets_1
+    - docker-compose -f docker-compose.yml push allenw4/xdpets_1:"latest"
   tags:
     - cicdrunner
   only:
