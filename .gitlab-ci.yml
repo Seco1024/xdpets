@@ -56,16 +56,34 @@ build:
   services:
     - docker:dind
   before_script:
-    - echo "$REGISTRY_TOKEN" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
+    - echo "$CI_REGISTRY_TOKEN" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
   script:
-    - docker-compose -f docker-compose.yml build
-    - docker-compose -f docker-compose.yml push
+    - docker-compose -f docker-compose.yml build -t $CI_REGISTRY_IMAGE
+    - docker-compose -f docker-compose.yml push $CI_REGISTRY_IMAGE
   tags:
     - cicdrunner
   only:
     - BackEnd
 
 
+# backend-deploy:
+#   stage: deploy
+#   image: gitlab/dind:latest
+#   before_script:
+#     - "which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )"
+#     - eval $(ssh-agent -s)
+#     - echo "${SSH_KEY_PRIVATE_GCP}" | tr -d '\r' > deploy.pem
+#     - chmod 400 deploy.pem
+#     - ssh-add deploy.pem
+#     - mkdir -p ~/.ssh
+#     - chmod 700 ~/.ssh
+#     - 'echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+#   script:
+#     - ssh ${GCP_LOGIN_USER}@${GCP_VM_HOST} "docker images && docker ps -a"
+#     - ssh ${GCP_LOGIN_USER}@${GCP_VM_HOST} "bash ~/clear-docker.sh backend-example $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME"
+#     - ssh ${GCP_LOGIN_USER}@${GCP_VM_HOST} "docker run -d --name backend-example -p 3000:3000 $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME"
+#   only:
+#     - BackEnd
 
 # deploy:
 #   stage: deploy
