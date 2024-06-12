@@ -79,7 +79,7 @@ deploy:
     - ssh $GCP_LOGIN_USER@$GCP_VM_HOST - echo "$CI_REGISTRY_TOKEN" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
     - ssh $GCP_LOGIN_USER@$GCP_VM_HOST 'cd XDPets && docker-compose -f docker-compose.yml pull && docker-compose -f docker-compose.yml up -d'
   only:
-    - main
+    - BackEnd
 
 # backend-deploy:
 #   stage: deploy
