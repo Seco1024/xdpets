@@ -60,7 +60,7 @@ build:
   script:
     - docker-compose -f docker-compose.yml build
     - docker images
-    - docker-compose -f docker-compose.yml push 
+    - docker-compose -f docker-compose.yml push allenw4/xdpets_1
   tags:
     - cicdrunner
   only:
