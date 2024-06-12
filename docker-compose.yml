@@ -1,9 +1,8 @@
 version: '3'
 
-services:
+services:z
   frontend:
     build: ./frontend
-    image: xdpets_1:latest
     ports:
       - "3000:3000"
     depends_on:
@@ -11,7 +10,6 @@ services:
 
   backend:
     build: ./backend
-    image: xdpets_1:latest
     ports:
       - "8000:8000"
     volumes:
@@ -27,7 +25,6 @@ services:
 
   celery:
     build: ./backend
-    image: xdpets_1:latest
     command: celery -A backend worker --loglevel=info
     volumes:
       - ./backend:/app
@@ -39,7 +36,6 @@ services:
 
   celery-beat:
     build: ./backend
-    image: xdpets_1:latest
     command: celery -A backend beat --loglevel=info
     volumes:
       - ./backend:/app
@@ -51,7 +47,6 @@ services:
 
   migrate:
     build: ./backend
-    image: xdpets_1:latest
     command: python manage.py makemigrations && python manage.py migrate
     volumes:
       - ./backend:/code
