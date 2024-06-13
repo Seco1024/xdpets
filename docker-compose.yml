@@ -17,7 +17,7 @@ services:
     volumes:
       - ./backend:/app
     env_file:
-      - ./backend/.env
+      - ./backend/backend/.env
     depends_on:
       - redis
 
@@ -34,7 +34,7 @@ services:
     volumes:
       - ./backend:/app
     env_file:
-      - ./backend/.env
+      - ./backend/backend/.env
     depends_on:
       - redis
     environment:
@@ -48,7 +48,7 @@ services:
     volumes:
       - ./backend:/app
     env_file:
-      - ./backend/.env
+      - ./backend/backend/.env
     depends_on:
       - redis
     environment:
