@@ -105,7 +105,7 @@ function UserInfoTable() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/administrator/getAllUsers",
+          "http://backend:8000/administrator/getAllUsers",
           { withCredentials: true }
         );
 
@@ -132,7 +132,7 @@ function UserInfoTable() {
   const handleConfirmAction = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:8000/administrator/deleteUser`,
+        `http://backend:8000/administrator/deleteUser`,
         { userId: deleteId },
         { withCredentials: true }
       );
@@ -165,7 +165,7 @@ function UserInfoTable() {
     const item = data.find((item) => item.userId === userId);
     try {
       const response = await axios.get(
-        `http://localhost:8000/user/getInformation/?uid=${item.userId}`,
+        `http://backend:8000/user/getInformation/?uid=${item.userId}`,
         { withCredentials: true }
       );
       if (response.status === 200) {

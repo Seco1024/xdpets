@@ -60,7 +60,7 @@ export default function SignUp() {
 
     try {
       let response = await axios.post(
-        "http://localhost:8000/user/signup/",
+        "http://backend:8000/user/signup/",
         qs.stringify({
           email: email,
           password: password,

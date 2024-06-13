@@ -65,13 +65,13 @@ export default function CardArea() {
     const fetchCatData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/pet/getAllPets"
+          "http://backend:8000/pet/getAllPets"
         );
 
         if (response.status === 200) {
           const formattedData = response.data["allPetInformation"].map(
             (item, index) => ({
-              img: "http://localhost:8000/" + item["image_url"],
+              img: "http://backend:8000/" + item["image_url"],
               title: item["pet_name"],
               category: item["category"],
               gender: item["gender"],

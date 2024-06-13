@@ -85,7 +85,7 @@ function SendAdoptionBox({ defaultValues }) {
     // Fetch the default values from an API
     async function fetchDefaultValues() {
       try {
-        const response = await axios.get(`http://localhost:8000/pet/getPet/?pet_id=${pet_id}`);
+        const response = await axios.get(`http://backend:8000/pet/getPet/?pet_id=${pet_id}`);
         const data = response.data["PetInformation"];
         const [city, area] = data.region.split(' ');
         setPetName(data.pet_name);
@@ -145,7 +145,7 @@ function SendAdoptionBox({ defaultValues }) {
     }
     try {
       const response = await axios.post(
-        "http://localhost:8000/user/updatePet/",
+        "http://backend:8000/user/updatePet/",
         {
           ownerId: uid,
           petId: pet_id
@@ -191,7 +191,7 @@ function SendAdoptionBox({ defaultValues }) {
   const handleDeleteConfirm = async () => {
     try {
       let request = await axios.post(
-        "http://localhost:8000/user/deletePet/",
+        "http://backend:8000/user/deletePet/",
         {
           ownerId: uid,
           petId: deleteId,
