@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-uq9o1q@1cbq93d%b&v3$oc!)_g7_$93qhes1*w6f9=q6sv709$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'django-db'
