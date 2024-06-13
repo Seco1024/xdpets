@@ -63,8 +63,6 @@ test_backend:
 build:
   stage: build
   image: docker:latest
-  services:
-    - docker:dind
   before_script:
     - echo "$CI_REGISTRY_TOKEN" | docker login -u "$CI_REGISTRY_USER" --password-stdin
     - mkdir -p ./backend/backend
