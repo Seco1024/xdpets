@@ -57,7 +57,7 @@ build:
   services:
     - docker:dind
   before_script:
-    - echo "$CI_REGISTRY_TOKEN" | docker login -u "$CI_REGISTRY_USER" --password-stdin
+    - echo "$IAN_TOKEN" | docker login -u "$CI_REGISTRY_USER" --password-stdin
   script:
     - docker-compose -f docker-compose.yml build
     - docker images
