@@ -19,16 +19,16 @@ variables:
   GCP_USER: $GCP_USER
   GCP_SSH_PRIVATE_KEY: $GCP_SSH_PRIVATE_KEY
   DOCKER_TLS_CERTDIR: ""
-  ENV_FILE: ".env"
+  ENV_FILE: "./backend/backend/.env"
 
 before_script:
   - mkdir -p ./backend/backend
-  - echo "MYSQL_NAME=$MYSQL_NAME" > ./backend/backend/.env
-  - echo "MYSQL_USER=$MYSQL_USER" >> ./backend/backend/.env
-  - echo "MYSQL_PASSWORD=$MYSQL_PASSWORD" >> ./backend/backend/.env
-  - echo "MYSQL_HOST=$MYSQL_HOST" >> ./backend/backend/.env
-  - echo "EMAIL_USER=$EMAIL_USER" >> ./backend/backend/.env
-  - echo "EMAIL_PASSWORD=$EMAIL_PASSWORD" >> ./backend/backend/.env
+  - echo "MYSQL_NAME=$MYSQL_NAME" > $ENV_FILE
+  - echo "MYSQL_USER=$MYSQL_USER" >> $ENV_FILE
+  - echo "MYSQL_PASSWORD=$MYSQL_PASSWORD" >> $ENV_FILE
+  - echo "MYSQL_HOST=$MYSQL_HOST" >> $ENV_FILE
+  - echo "EMAIL_USER=$EMAIL_USER" >> $ENV_FILE
+  - echo "EMAIL_PASSWORD=$EMAIL_PASSWORD" >> $ENV_FILE
 
 test_frontend:
   stage: test_frontend
@@ -67,13 +67,20 @@ build:
     - docker:dind
   before_script:
     - echo "$CI_REGISTRY_TOKEN" | docker login -u "$CI_REGISTRY_USER" --password-stdin
+    - mkdir -p ./backend/backend
+    - echo "MYSQL_NAME=$MYSQL_NAME" > $ENV_FILE
+    - echo "MYSQL_USER=$MYSQL_USER" >> $ENV_FILE
+    - echo "MYSQL_PASSWORD=$MYSQL_PASSWORD" >> $ENV_FILE
+    - echo "MYSQL_HOST=$MYSQL_HOST" >> $ENV_FILE
+    - echo "EMAIL_USER=$EMAIL_USER" >> $ENV_FILE
+    - echo "EMAIL_PASSWORD=$EMAIL_PASSWORD" >> $ENV_FILE
   script:
     - docker-compose -f docker-compose.yml build
     - docker images
     - docker-compose -f docker-compose.yml push
   artifacts:
     paths:
-      - ./backend/backend/.env
+      - $ENV_FILE
   tags:
     - cicdrunner2
   only:
@@ -86,6 +93,13 @@ deploy:
     - docker:dind
   before_script:
     - echo "$CI_REGISTRY_TOKEN" | docker login -u "$CI_REGISTRY_USER" --password-stdin
+    - mkdir -p ./backend/backend
+    - echo "MYSQL_NAME=$MYSQL_NAME" > $ENV_FILE
+    - echo "MYSQL_USER=$MYSQL_USER" >> $ENV_FILE
+    - echo "MYSQL_PASSWORD=$MYSQL_PASSWORD" >> $ENV_FILE
+    - echo "MYSQL_HOST=$MYSQL_HOST" >> $ENV_FILE
+    - echo "EMAIL_USER=$EMAIL_USER" >> $ENV_FILE
+    - echo "EMAIL_PASSWORD=$EMAIL_PASSWORD" >> $ENV_FILE
   script:
     - docker compose -f docker-compose.yml pull
     - docker compose -f docker-compose.yml up
