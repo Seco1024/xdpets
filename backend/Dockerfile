@@ -8,6 +8,6 @@ COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /app/
-COPY .env /app/backend/.env
+COPY ./backend/backend/.env /app/backend/.env
 EXPOSE 8000
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
