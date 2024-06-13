@@ -79,7 +79,7 @@ deploy:
     - ssh $GCP_LOGIN_USER@$GCP_VM_HOST "echo "$CI_REGISTRY_TOKEN" | docker login -u "$CI_REGISTRY_USER" --password-stdin"
     - ssh $GCP_LOGIN_USER@$GCP_VM_HOST "docker images"
   script:
-    - ssh $GCP_LOGIN_USER@$GCP_VM_HOST "docker-compose -f docker-compose.yml pull"
-    - ssh $GCP_LOGIN_USER@$GCP_VM_HOST "docker-compose -f docker-compose.yml up -d"
+    - ssh $GCP_LOGIN_USER@$GCP_VM_HOST "docker compose -f docker-compose.yml pull"
+    - ssh $GCP_LOGIN_USER@$GCP_VM_HOST "docker compose -f docker-compose.yml up -d"
   only:
     - main
