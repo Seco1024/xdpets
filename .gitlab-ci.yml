@@ -76,6 +76,7 @@ deploy:
     - chmod 600 ~/.ssh/id_rsa
     - ssh-keyscan $GCP_VM_HOST >> ~/.ssh/known_hosts
     - ssh $GCP_LOGIN_USER@$GCP_VM_HOST "echo "$CI_REGISTRY_TOKEN" | docker login -u "$CI_REGISTRY_USER" --password-stdin"
+    - ssh $GCP_LOGIN_USER@$GCP_VM_HOST "docker images"
   script:
     - ssh $GCP_LOGIN_USER@$GCP_VM_HOST "docker-compose -f docker-compose.yml pull"
     - ssh $GCP_LOGIN_USER@$GCP_VM_HOST "docker-compose -f docker-compose.yml up -d"
