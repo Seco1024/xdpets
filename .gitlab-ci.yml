@@ -69,12 +69,14 @@ test_backend:
 
 deploy:
   stage: deploy
-  image: alpine:latest
+  image: docker:latest
+  services:
+    - docker:dind
   before_script:
     - echo "$CI_REGISTRY_TOKEN" | docker login -u "$CI_REGISTRY_USER" --password-stdin
   script:
-    - ssh $GCP_LOGIN_USER@$GCP_VM_HOST "docker compose -f docker-compose.yml pull"
-    - ssh $GCP_LOGIN_USER@$GCP_VM_HOST "docker compose -f docker-compose.yml up"
+    - docker compose -f docker-compose.yml pull
+    - docker compose -f docker-compose.yml up
   tags:
     - cicdrunner2
   only:
