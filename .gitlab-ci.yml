@@ -50,21 +50,21 @@ test_backend:
   tags:
     - nccutrial_backend
 
-# build:
-#   stage: build
-#   image: docker:latest
-#   services:
-#     - docker:dind
-#   before_script:
-#     - echo "$CI_REGISTRY_TOKEN" | docker login -u "$CI_REGISTRY_USER" --password-stdin
-#   script:
-#     - docker-compose -f docker-compose.yml build
-#     - docker images
-#     - docker-compose -f docker-compose.yml push
-#   tags:
-#     - cicdrunner
-#   only:
-#     - main
+build:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - echo "$CI_REGISTRY_TOKEN" | docker login -u "$CI_REGISTRY_USER" --password-stdin
+  script:
+    - docker-compose -f docker-compose.yml build
+    - docker images
+    - docker-compose -f docker-compose.yml push
+  tags:
+    - cicdrunner2
+  only:
+    - main
 
 
 deploy:
@@ -80,6 +80,8 @@ deploy:
     - ssh $GCP_LOGIN_USER@$GCP_VM_HOST "docker images"
   script:
     - ssh $GCP_LOGIN_USER@$GCP_VM_HOST "docker compose -f docker-compose.yml pull"
-    - ssh $GCP_LOGIN_USER@$GCP_VM_HOST "docker compose -f docker-compose.yml up -d"
+    - ssh $GCP_LOGIN_USER@$GCP_VM_HOST "docker compose -f docker-compose.yml up"
+  tags:
+    - cicdrunner2
   only:
     - main
