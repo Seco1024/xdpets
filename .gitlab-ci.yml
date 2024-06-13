@@ -74,7 +74,6 @@ build:
   only:
     - main
 
-
 deploy:
   stage: deploy
   image: docker:latest
