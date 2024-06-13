@@ -19,7 +19,9 @@ def check_preferences_and_send_emails():
         for keys in preference.__dict__.keys():
             if keys in ['_state', 'uid', 'preferenceId', 'matched', 'uid_id']:
                 continue
-            if getattr(preference, keys):
+            elif keys == 'region' and getattr(preference, keys):
+                query &= Q(region__icontains=getattr(preference, keys))
+            elif getattr(preference, keys):
                 query &= Q(**{keys: getattr(preference, keys)})
 
         query &= Q(legal=True)

@@ -136,7 +136,7 @@ def add_new_pet(request):
         category = request.POST['category']
         gender = request.POST['gender']
         size = request.POST['size']
-        region = request.POST['region']
+        region = request.POST['region'].replace('臺', '台')
         age = request.POST['age']
         coat_color = request.POST['coat_color']
         ligated = request.POST['ligated']
