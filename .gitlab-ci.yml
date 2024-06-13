@@ -57,7 +57,7 @@ build:
     - docker:dind
   before_script:
     - echo "$CI_REGISTRY_TOKEN" | docker login -u "$CI_REGISTRY_USER" --password-stdin
-    - echo "MYSQL_NAME=$MYSQL_NAME" >> .env
+    - echo "MYSQL_NAME=$MYSQL_NAME" > .env
     - echo "MYSQL_USER=$MYSQL_USER" >> .env
     - echo "MYSQL_PASSWORD=$MYSQL_PASSWORD" >> .env
     - echo "MYSQL_HOST=$MYSQL_HOST" >> .env
@@ -81,7 +81,7 @@ deploy:
     - docker:dind
   before_script:
     - echo "$CI_REGISTRY_TOKEN" | docker login -u "$CI_REGISTRY_USER" --password-stdin
-    - echo "MYSQL_NAME=$MYSQL_NAME" >> .env
+    - echo "MYSQL_NAME=$MYSQL_NAME" > .env
     - echo "MYSQL_USER=$MYSQL_USER" >> .env
     - echo "MYSQL_PASSWORD=$MYSQL_PASSWORD" >> .env
     - echo "MYSQL_HOST=$MYSQL_HOST" >> .env
