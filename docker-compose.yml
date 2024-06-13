@@ -8,6 +8,7 @@ services:
       - "3000:3000"
     depends_on:
       - backend
+    restart: always
 
   backend:
     build: ./backend
@@ -20,12 +21,14 @@ services:
       - ./backend/backend/.env
     depends_on:
       - redis
+    restart: always
 
   redis:
     image: redis:6.2
     container_name: redis
     ports:
       - "6379:6379"
+    restart: always
 
   celery:
     build: ./backend
@@ -40,6 +43,7 @@ services:
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    restart: always
 
   celery-beat:
     build: ./backend
@@ -54,6 +58,7 @@ services:
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    restart: always
 
   # migrate:
   #   build: ./backend
