@@ -5,7 +5,6 @@
 # Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
 # Note that environment variables can be set in several places
 # See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
-
 stages:
   - test_frontend
   - test_backend
@@ -67,7 +66,7 @@ build:
   services:
     - docker:dind
   before_script:
-    - zd
+    - echo "$CI_REGISTRY_TOKEN" | docker login -u "$CI_REGISTRY_USER" --password-stdin
     - mkdir -p ./backend/backend
     - echo "MYSQL_NAME=$MYSQL_NAME" > $ENV_FILE
     - echo "MYSQL_USER=$MYSQL_USER" >> $ENV_FILE
