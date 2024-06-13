@@ -13,7 +13,7 @@ const filterRegionOption = {
   label: "區域",
   options: [
     "不限區域",
-    "台北市",
+    "臺北市",
     "新北市",
     "桃園市",
     "台中市",
