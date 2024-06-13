@@ -12,7 +12,7 @@ stages:
   - deploy
 
 variables:
-  DOCKER_HOST: tcp://docker:2375/
+  # DOCKER_HOST: tcp://docker:2375/
   DOCKER_DRIVER: overlay2
   DOCKER_REGISTRY: docker.io
   GCP_HOST: $GCP_HOST
@@ -63,6 +63,8 @@ test_backend:
 build:
   stage: build
   image: docker:latest
+  services:
+    - docker:dind
   before_script:
     - echo "$CI_REGISTRY_TOKEN" | docker login -u "$CI_REGISTRY_USER" --password-stdin
     - mkdir -p ./backend/backend
@@ -87,8 +89,8 @@ build:
 deploy:
   stage: deploy
   image: docker:latest
-  services:
-    - docker:dind
+  # services:
+  #   - docker:dind
   before_script:
     - echo "$CI_REGISTRY_TOKEN" | docker login -u "$CI_REGISTRY_USER" --password-stdin
   script:
