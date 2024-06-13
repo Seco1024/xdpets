@@ -66,6 +66,7 @@ build:
   only:
     - main
 
+
 # deploy:
 #   stage: deploy
 #   image: alpine:latest
