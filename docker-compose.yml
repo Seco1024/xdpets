@@ -3,6 +3,7 @@ version: '3'
 services:
   frontend:
     build: ./frontend
+    image: $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_REF_SLUG
     ports:
       - "3000:3000"
     depends_on:
@@ -10,6 +11,7 @@ services:
 
   backend:
     build: ./backend
+    image: $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_REF_SLUG
     ports:
       - "8000:8000"
     volumes:
@@ -25,6 +27,7 @@ services:
 
   celery:
     build: ./backend
+    image: $CI_REGISTRY_IMAGE/celery:$CI_COMMIT_REF_SLUG
     command: celery -A backend worker --loglevel=info
     volumes:
       - ./backend:/app
@@ -37,6 +40,7 @@ services:
   celery-beat:
     build: ./backend
     command: celery -A backend beat --loglevel=info
+    image: $CI_REGISTRY_IMAGE/celery-beat:$CI_COMMIT_REF_SLUG
     volumes:
       - ./backend:/app
     depends_on:
@@ -45,8 +49,8 @@ services:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
 
-  migrate:
-    build: ./backend
-    command: python manage.py makemigrations && python manage.py migrate
-    volumes:
-      - ./backend:/code
+  # migrate:
+  #   build: ./backend
+  #   command: python manage.py makemigrations && python manage.py migrate
+  #   volumes:
+  #     - ./backend:/code
