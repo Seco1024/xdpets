@@ -50,21 +50,28 @@ test_backend:
   tags:
     - nccutrial_backend
 
-# build:
-#   stage: build
-#   image: docker:latest
-#   services:
-#     - docker:dind
-#   before_script:
-#     - echo "$CI_REGISTRY_TOKEN" | docker login -u "$CI_REGISTRY_USER" --password-stdin
-#   script:
-#     - docker-compose -f docker-compose.yml build
-#     - docker images
-#     - docker-compose -f docker-compose.yml push
-#   tags:
-#     - cicdrunner2
-#   only:
-#     - main
+build:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - echo "$CI_REGISTRY_TOKEN" | docker login -u "$CI_REGISTRY_USER" --password-stdin
+    - echo "MYSQL_NAME=$MYSQL_NAME" >> .env
+    - echo "MYSQL_USER=$MYSQL_USER" >> .env
+    - echo "MYSQL_PASSWORD=$MYSQL_PASSWORD" >> .env
+    - echo "MYSQL_HOST=$MYSQL_HOST" >> .env
+    - echo "EMAIL_USER=$EMAIL_USER" >> .env
+    - echo "EMAIL_PASSWORD=$EMAIL_PASSWORD" >> .env
+
+  script:
+    - docker-compose -f docker-compose.yml build
+    - docker images
+    - docker-compose -f docker-compose.yml push
+  tags:
+    - cicdrunner2
+  only:
+    - main
 
 
 deploy:
@@ -74,6 +81,12 @@ deploy:
     - docker:dind
   before_script:
     - echo "$CI_REGISTRY_TOKEN" | docker login -u "$CI_REGISTRY_USER" --password-stdin
+    - echo "MYSQL_NAME=$MYSQL_NAME" >> .env
+    - echo "MYSQL_USER=$MYSQL_USER" >> .env
+    - echo "MYSQL_PASSWORD=$MYSQL_PASSWORD" >> .env
+    - echo "MYSQL_HOST=$MYSQL_HOST" >> .env
+    - echo "EMAIL_USER=$EMAIL_USER" >> .env
+    - echo "EMAIL_PASSWORD=$EMAIL_PASSWORD" >> .env
   script:
     - docker compose -f docker-compose.yml pull
     - docker compose -f docker-compose.yml up
