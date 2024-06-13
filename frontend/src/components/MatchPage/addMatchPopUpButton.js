@@ -134,7 +134,6 @@ function FormDialog({ setRows, rows }) {
                   name="type"
                   control={control}
                   defaultValue=""
-                  rules={{ required: "必填項目" }}
                   render={({ field, fieldState }) => (
                     <TextField
                       {...field}
@@ -162,7 +161,6 @@ function FormDialog({ setRows, rows }) {
                   name="color"
                   control={control}
                   defaultValue=""
-                  rules={{ required: "必填項目" }}
                   render={({ field, fieldState }) => (
                     <TextField
                       {...field}
@@ -183,7 +181,6 @@ function FormDialog({ setRows, rows }) {
                   name="gender"
                   control={control}
                   defaultValue=""
-                  rules={{ required: "必填項目" }}
                   render={({ field, fieldState }) => (
                     <TextField
                       {...field}
@@ -211,7 +208,6 @@ function FormDialog({ setRows, rows }) {
                   name="figure"
                   control={control}
                   defaultValue=""
-                  rules={{ required: "必填項目" }}
                   render={({ field, fieldState }) => (
                     <TextField
                       {...field}
@@ -238,7 +234,6 @@ function FormDialog({ setRows, rows }) {
                   name="region"
                   control={control}
                   defaultValue=""
-                  rules={{ required: "必填項目" }}
                   render={({ field, fieldState }) => (
                     <TextField
                       {...field}
@@ -261,15 +256,11 @@ function FormDialog({ setRows, rows }) {
                   )}
                 />
               </Grid>
-              <Grid item xs={6}>
+              {/* <Grid item xs={6}>
                 <Controller
                   name="age"
                   control={control}
                   defaultValue=""
-                  rules={{
-                    required: "必填項目",
-                    min: { value: 0, message: "年齡不能是負的" },
-                  }}
                   render={({ field, fieldState }) => (
                     <TextField
                       {...field}
@@ -285,13 +276,12 @@ function FormDialog({ setRows, rows }) {
                     />
                   )}
                 />
-              </Grid>
+              </Grid> */}
               <Grid item xs={6}>
                 <Controller
                   name="sterilization"
                   control={control}
                   defaultValue=""
-                  rules={{ required: "必填項目" }}
                   render={({ field, fieldState }) => (
                     <TextField
                       {...field}
@@ -316,7 +306,6 @@ function FormDialog({ setRows, rows }) {
                   name="breed"
                   control={control}
                   defaultValue=""
-                  rules={{ required: "必填項目" }}
                   render={({ field, fieldState }) => (
                     <TextField
                       {...field}

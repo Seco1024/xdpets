@@ -21,7 +21,7 @@ def addPreference(request):
             "gender": data['PreferenceInfo']['gender'],
             "size": data['PreferenceInfo']['size'],
             "region": data['PreferenceInfo']['region'],
-            "age": data['PreferenceInfo']['age'],
+            # "age": data['PreferenceInfo']['age'],
             "coat_color": data['PreferenceInfo']['coat_color'],
             "ligated": data['PreferenceInfo']['ligated'],
         }
