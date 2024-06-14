@@ -38,7 +38,7 @@ function ResponsiveAppBar() {
           setPages(["會員中心", "領養認養", "刊登送養"]);
           setIsLoggedIn(true);
           const checkadmin = await axios.get(
-            `http://backend:8000/administrator/checkIsAdmin?userId=${uid}`
+            `http://localhost:8000/administrator/checkIsAdmin?userId=${uid}`
           );
 
           if (checkadmin.status === 200) {

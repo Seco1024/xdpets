@@ -23,7 +23,7 @@ export default function ContactCard({ owner_id }) {
   React.useEffect(() => {
     if (loggedIn && owner_id) {
       axios
-        .get(`http://backend:8000/user/getInformation/?uid=${owner_id}`, {
+        .get(`http://localhost:8000/user/getInformation/?uid=${owner_id}`, {
           withCredentials: true,
         })
         .then((response) => {

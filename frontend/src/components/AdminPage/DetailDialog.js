@@ -64,7 +64,7 @@ function DetailsDialog({ open, onClose, petDetails }) {
                     {value.map((url, index) => (
                       <Grid item xs={6} key={index}>
                         <img
-                          src={`http://backend:8000${url}`}
+                          src={`http://localhost:8000${url}`}
                           alt={`暫時找不到這張圖片`}
                           style={{ width: "100%", height: "auto" }}
                         />

@@ -136,7 +136,7 @@ const SendAdoptionBox = ({ isCheckboxChecked }) => {
     }
     try {
       const response = await axios.post(
-        "http://backend:8000/user/addNewPet/",
+        "http://localhost:8000/user/addNewPet/",
         formData,
         { withCredentials: true }
       );

@@ -56,7 +56,7 @@ function EditMatchDialog({ open, onClose, data }) {
     };
     try {
       const response = await axios.post(
-        "http://backend:8000/match/updatePreference",
+        "http://localhost:8000/match/updatePreference",
         postData,
         { withCredentials: true }
       );

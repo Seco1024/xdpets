@@ -122,7 +122,7 @@ function SentAdoptionInfoTable() {
     const fetchData = async () => {
       try {
         let response = await axios.get(
-          "http://backend:8000/administrator/getUnjudgedPets",
+          "http://localhost:8000/administrator/getUnjudgedPets",
           {
             withCredentials: true,
           }
@@ -156,7 +156,7 @@ function SentAdoptionInfoTable() {
     if (actionType === "check") {
       try {
         const response = await axios.put(
-          `http://backend:8000/administrator/judgePet`,
+          `http://localhost:8000/administrator/judgePet`,
           {
             petId: actionId,
             isLegal: true,
@@ -183,7 +183,7 @@ function SentAdoptionInfoTable() {
     } else if (actionType === "delete") {
       try {
         const response = await axios.put(
-          `http://backend:8000/administrator/judgePet`,
+          `http://localhost:8000/administrator/judgePet`,
           {
             petId: actionId,
             isLegal: false,
@@ -229,7 +229,7 @@ function SentAdoptionInfoTable() {
   const handleShow = async (id) => {
     try {
       const response = await axios.get(
-        `http://backend:8000/pet/getPet/?pet_id=${id}`
+        `http://localhost:8000/pet/getPet/?pet_id=${id}`
       );
       if (response.status === 200) {
         setPetDetails(response.data["PetInformation"]);
