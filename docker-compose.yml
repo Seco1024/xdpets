@@ -4,7 +4,7 @@ services:
   frontend:
     build: ./frontend
     # image: ${CI_REGISTRY_USER:-default_user}/xdpets_frontend:${CI_COMMIT_REF_SLUG:-latest}
-    # image: seco1024/xdpets_frontend:main
+    image: seco1024/xdpets_frontend:main
     ports:
       - "3000:3000"
     depends_on:
@@ -14,7 +14,7 @@ services:
   backend:
     build: ./backend
     # image: ${CI_REGISTRY_USER:-default_user}/xdpets_backend:${CI_COMMIT_REF_SLUG:-latest}
-    # image: seco1024/xdpets_backend:main
+    image: seco1024/xdpets_backend:main
     ports:
       - "8000:8000"
     volumes:
@@ -35,7 +35,7 @@ services:
   celery:
     build: ./backend
     # image: ${CI_REGISTRY_USER:-default_user}/xdpets_celery:${CI_COMMIT_REF_SLUG:-latest}
-    # image: seco1024/xdpets_celery:main
+    image: seco1024/xdpets_celery:main
     command: celery -A backend worker --loglevel=info
     volumes:
       - ./backend:/app
@@ -52,7 +52,7 @@ services:
     build: ./backend
     command: celery -A backend beat --loglevel=info
     # image: ${CI_REGISTRY_USER:-default_user}/xdpets_celery-beat:${CI_COMMIT_REF_SLUG:-latest}
-    # image: seco1024/xdpets_celery-beat:main
+    image: seco1024/xdpets_celery-beat:main
     volumes:
       - ./backend:/app
     env_file:
