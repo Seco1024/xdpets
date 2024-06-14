@@ -124,12 +124,14 @@ CACHES = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "http://35.201.245.108:3000",
 ]
 CORS_ALLOW_CREDENTIALS = True
 CSRF_COOKIE_SECURE = None
 # CSRF settings
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
+    "http://35.201.245.108:3000",
 ]
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
