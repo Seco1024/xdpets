@@ -109,7 +109,7 @@ function PetInfoTable() {
     const fetchData = async () => {
       try {
         let response = await axios.get(
-          "http://localhost:8000/administrator/getJudgedPets",
+          "http://35.201.245.108:8000/administrator/getJudgedPets",
           {
             withCredentials: true,
           }
@@ -142,7 +142,7 @@ function PetInfoTable() {
   const handleShow = async (id) => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/pet/getPet/?pet_id=${id}`
+        `http://35.201.245.108:8000/pet/getPet/?pet_id=${id}`
       );
       if (response.status === 200) {
         setPetDetails(response.data["PetInformation"]);
@@ -159,7 +159,7 @@ function PetInfoTable() {
   const handleConfirmAction = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:8000/administrator/deletePet`,
+        `http://35.201.245.108:8000/administrator/deletePet`,
         {
           petId: deleteId,
         },

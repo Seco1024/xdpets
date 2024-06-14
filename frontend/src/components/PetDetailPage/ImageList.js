@@ -21,7 +21,7 @@ export default function StandardImageList({ catData }) {
   React.useEffect(() => {
     if (catData["images_urls"] && catData["images_urls"].length > 0) {
       const fullUrlItemData = catData["images_urls"].map(
-        (url) => `http://localhost:8000${url}`
+        (url) => `http://35.201.245.108:8000${url}`
       );
       setItemData(fullUrlItemData);
       setSelectedImage(fullUrlItemData[0]);

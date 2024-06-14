@@ -32,7 +32,7 @@ const User = () => {
     // Fetch user info based on UID
     const fetchUserInfo = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/user/info/${uid}`);
+        const response = await axios.get(`http://35.201.245.108:8000/user/info/${uid}`);
         setUserInfo({
           email: response.data.email,
           phone: response.data.phone,
@@ -80,7 +80,7 @@ const User = () => {
 
   const handleConfirmAction = async () => {
     try {
-      await axios.post("http://localhost:8000/user/update", {
+      await axios.post("http://35.201.245.108:8000/user/update", {
         uid,
         email: userInfo.email,
         phone: userInfo.phone,

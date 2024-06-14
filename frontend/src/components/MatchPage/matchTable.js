@@ -79,7 +79,7 @@ export default function MatchTable({ preferences }) {
     const rowToDelete = rows.find((row) => row.id === deleteId);
     try {
       let request = await axios.post(
-        "http://localhost:8000/match/deletePreference",
+        "http://35.201.245.108:8000/match/deletePreference",
         {
           preferenceId: rowToDelete.id,
           userId: uid,

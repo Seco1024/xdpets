@@ -70,7 +70,7 @@ export default function SignIn() {
     setLoading(true);
     try {
       let response = await axios.post(
-        "http://localhost:8000/user/login/",
+        "http://35.201.245.108:8000/user/login/",
         qs.stringify({
           username: username,
           password: password,

@@ -118,7 +118,7 @@ function SentAdoptionInfoTable() {
     async function fetchDefaultValues() {
       try {
         const response = await axios.get(
-          `http://localhost:8000/pet/getMyPets/?user_id=${uid}`,
+          `http://35.201.245.108:8000/pet/getMyPets/?user_id=${uid}`,
           {
             withCredentials: true,
           }
@@ -149,7 +149,7 @@ function SentAdoptionInfoTable() {
   const handleDeleteConfirm = async () => {
     try {
       let request = await axios.post(
-        "http://localhost:8000/user/deletePet/",
+        "http://35.201.245.108:8000/user/deletePet/",
         qs.stringify({
           ownerId: uid,
           petId: deleteId,

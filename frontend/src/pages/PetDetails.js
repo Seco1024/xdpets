@@ -25,7 +25,7 @@ export default function PetDetails() {
     const fetchCatData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/pet/getPet/?pet_id=${petId}`
+          `http://35.201.245.108:8000/pet/getPet/?pet_id=${petId}`
         );
 
         if (response.status == 200) {

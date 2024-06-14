@@ -22,7 +22,7 @@ export default function Match() {
     const fetchPreferences = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/match/getPreference?userId=${uid}`,
+          `http://35.201.245.108:8000/match/getPreference?userId=${uid}`,
           {
             withCredentials: true,
           }

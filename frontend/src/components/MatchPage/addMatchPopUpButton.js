@@ -92,7 +92,7 @@ function FormDialog({ setRows, rows }) {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/match/addPreference",
+        "http://35.201.245.108:8000/match/addPreference",
         postData,
         {
           withCredentials: true,
