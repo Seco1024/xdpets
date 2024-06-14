@@ -82,7 +82,7 @@ build:
     paths:
       - $ENV_FILE
   tags:
-    - cicdrunner2
+    - cicdrunner
   only:
     - main
 
@@ -97,6 +97,6 @@ deploy:
     - docker compose -f docker-compose.yml pull
     - docker compose -f docker-compose.yml up -d
   tags:
-    - cicdrunner2
+    - cicdrunner
   only:
     - main
